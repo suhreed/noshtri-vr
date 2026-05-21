@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>কারখানা ঝুঁকি শনাক্তকরণ — Factory Hazard Identification VR</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.6.0/aframe.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+  </style>
+</head>
+<body>
+  <a-scene>
+    <!-- ASSETS -->
+    <a-assets>
+      <!-- Free 360° industrial/warehouse photo from Poly Haven -->
+      <img id="factory-floor" src="https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/empty_warehouse_01_4k.exr" crossorigin="anonymous">
+      <img id="chemical-area" src="https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/studio_small_03_4k.exr" crossorigin="anonymous">
+      <img id="exit-area" src="https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/old_bus_station_4k.exr" crossorigin="anonymous">
+      
+      <!-- Bengali font -->
+      <a-asset-item id="bn-font" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Regular.woff2"></a-asset-item>
+    </a-assets>
+
+    <!-- ======== SCENE 1: Factory Floor ======== -->
+    <a-entity id="scene1" class="scene">
+      <a-sky src="#factory-floor" rotation="0 -90 0"></a-sky>
+
+      <!-- Title -->
+      <a-text value="কারখানা ঝুঁকি শনাক্তকরণ — দৃশ্য ১: উৎপাদন এলাকা" 
+              position="0 1.8 -2.5" align="center" color="#ffffff" width="7" side="double"
+              font="#bn-font">
+      </a-text>
+      <a-text value="চারপাশে তাকান এবং নীল বিন্দুতে ক্লিক করে ঝুঁকি চিহ্নিত করুন" 
+              position="0 1.4 -2.5" align="center" color="#FFEB3B" width="6" side="double"
+              font="#bn-font">
+      </a-text>
+
+      <!-- HOTSPOT 1: Unguarded machine -->
+      <a-entity position="-3 1.2 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অরক্ষিত মেশিন" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: মেশিনের চলন্ত অংশে কোনো নিরাপত্তা কভার নেই। এতে শ্রমিকের হাত বা কাপড় আটকে যেতে পারে।
+ঝুঁকি স্তর: উচ্চ
+প্রয়োজনীয় ব্যবস্থা: চলন্ত অংশে সুরক্ষা কভার বসান।
+আইনি বিধান: কারখানা আইন ১৯৬৫, ধারা ২১" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 2: Blocked fire exit -->
+      <a-entity position="2.5 1.0 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অবরুদ্ধ ফায়ার ডোর" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: জরুরী প্রস্থান পথ মালামাল দিয়ে ব্লক করা আছে। আগুন লাগলে কর্মীরা বের হতে পারবেন না।
+ঝুঁকি স্তর: উচ্চ
+প্রয়োজনীয় ব্যবস্থা: সব সময় প্রস্থান পথ খালি রাখুন।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৬২" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 3: No PPE worker -->
+      <a-entity position="-1 1.5 -4.5" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="পিপিই নেই" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: কর্মী কোনো ব্যক্তিগত সুরক্ষা সরঞ্জাম (পিপিই) পরেননি। উৎপাদন এলাকায় হেলমেট, গগলস, ও সুরক্ষা জুতা প্রয়োজন।
+ঝুঁকি স্তর: মাঝারি
+প্রয়োজনীয় ব্যবস্থা: পিপিই বিতরণ ও ব্যবহার বাধ্যতামূলক করুন।" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 4: Open electrical panel -->
+      <a-entity position="1 -0.5 -3.5" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="খোলা ইলেক্ট্রিক্যাল প্যানেল" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: বৈদ্যুতিক প্যানেল খোলা এবং তারগুলি উন্মুক্ত। বিদ্যুৎস্পৃষ্ট হওয়ার ঝুঁকি।
+ঝুঁকি স্তর: উচ্চ
+প্রয়োজনীয় ব্যবস্থা: প্যানেল বন্ধ করুন এবং শুধু লাইসেন্সপ্রাপ্ত ইলেক্ট্রিশিয়ানের জন্য খুলুন।
+আইনি বিধান: কারখানা আইন ১৯৬৫, ধারা ৩৪" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 5: Wet floor -->
+      <a-entity position="-2 -0.5 -3.5" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="পিচ্ছিল মেঝে" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: মেঝেতে পানি/তেল পড়ে আছে এবং কোনো সতর্কীকরণ চিহ্ন নেই। পিছলে পড়ার ঝুঁকি।
+ঝুঁকি স্তর: মাঝারি
+প্রয়োজনীয় ব্যবস্থা: তৎক্ষণাৎ মেঝে পরিষ্কার করুন এবং 'পিচ্ছিল মেঝে' সাইন বসান।" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Next Scene Button -->
+      <a-entity position="0 2.3 -3" class="clickable" nav-button
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #4CAF50">
+        <a-text value="পরবর্তী দৃশ্য →" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font">
+        </a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ======== SCENE 2: Chemical Storage ======== -->
+    <a-entity id="scene2" class="scene" visible="false">
+      <a-sky src="#chemical-area" rotation="0 -90 0"></a-sky>
+
+      <a-text value="কারখানা ঝুঁকি শনাক্তকরণ — দৃশ্য ২: রাসায়নিক সংরক্ষণাগার" 
+              position="0 1.8 -2.5" align="center" color="#ffffff" width="7" side="double" font="#bn-font">
+      </a-text>
+
+      <!-- HOTSPOT 1: Unlabeled chemical drum -->
+      <a-entity position="-2 1.2 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="লেবেলবিহীন রাসায়নিক" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: রাসায়নিক ড্রামে কোনো লেবেল নেই। কী রাসায়নিক তা বোঝার উপায় নেই।
+ঝুঁকি স্তর: উচ্চ
+প্রয়োজনীয় ব্যবস্থা: প্রতিটি ড্রামে সঠিক নাম ও বিপদ চিহ্নযুক্ত লেবেল লাগান।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৩৪(ক)" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 2: No secondary containment -->
+      <a-entity position="1 1.0 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="গৌণ প্রতিরোধক নেই" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: ড্রামের নিচে কোনো সেকেন্ডারি কনটেনমেন্ট/ড্রিপ ট্রে নেই। ছিদ্র হলে রাসায়নিক মাটিতে ছড়িয়ে পড়বে।
+প্রয়োজনীয় ব্যবস্থা: প্রতিটি ড্রামের নিচে ড্রিপ ট্রে বা বান্ডেড এলাকা ব্যবহার করুন।" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 3: Food near chemicals -->
+      <a-entity position="-0.5 1.5 -3.5" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="রাসায়নিকের কাছে খাবার" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: রাসায়নিক সংরক্ষণ এলাকায় খাবার ও পানীয় রাখা হয়েছে। রাসায়নিক দূষণের ঝুঁকি।
+ঝুঁকি স্তর: উচ্চ
+প্রয়োজনীয় ব্যবস্থা: রাসায়নিক এলাকায় খাদ্য/পানীয় নিষিদ্ধ করুন। নির্ধারিত খাবার এলাকা চিহ্নিত করুন।" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 4: No PPE for chemical handling -->
+      <a-entity position="2.5 1.5 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="পিপিই নেই" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: রাসায়নিক এলাকায় গ্লাভস, মাস্ক বা চশমা পাওয়া যায় না।
+প্রয়োজনীয় ব্যবস্থা: রাসায়নিক হ্যান্ডলিংয়ের জন্য পিপিই স্টেশন স্থাপন করুন।
+এসডিএস (সেফটি ডেটা শিট) অবশ্যই সকল রাসায়নিকের জন্য উপলব্ধ থাকতে হবে।" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Navigation buttons -->
+      <a-entity position="-1.5 2.3 -3" class="clickable" nav-button
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #2196F3">
+        <a-text value="← পূর্ববর্তী" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font">
+        </a-text>
+      </a-entity>
+      <a-entity position="1.5 2.3 -3" class="clickable" nav-button
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #4CAF50">
+        <a-text value="পরবর্তী দৃশ্য →" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font">
+        </a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ======== SCENE 3: Emergency Exit ======== -->
+    <a-entity id="scene3" class="scene" visible="false">
+      <a-sky src="#exit-area" rotation="0 -90 0"></a-sky>
+
+      <a-text value="কারখানা ঝুঁকি শনাক্তকরণ — দৃশ্য ৩: জরুরী প্রস্থান ও নিরাপত্তা" 
+              position="0 1.8 -2.5" align="center" color="#ffffff" width="7" side="double" font="#bn-font">
+      </a-text>
+
+      <!-- HOTSPOT 1: Missing fire extinguisher -->
+      <a-entity position="-2 1.2 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অগ্নি নির্বাপক নেই" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: নির্ধারিত স্থানে অগ্নি নির্বাপক যন্ত্র নেই। জরুরী অবস্থায় আগুন নেভানোর উপায় নেই।
+ঝুঁকি স্তর: উচ্চ
+প্রয়োজনীয় ব্যবস্থা: প্রতি ২০০ বর্গমিটারে একটি করে অগ্নি নির্বাপক যন্ত্র স্থাপন করুন। মাসিক পরীক্ষা বাধ্যতামূলক।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৬১" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 2: No exit sign -->
+      <a-entity position="1 1.8 -4" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="প্রস্থান চিহ্ন নেই" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: জরুরী প্রস্থানের পথে কোনো দিকনির্দেশক চিহ্ন বা সাইন নেই। অন্ধকার বা ধোঁয়ায় কর্মীরা পথ খুঁজে পাবে না।
+প্রয়োজনীয় ব্যবস্থা: আলোকিত EXIT সাইন এবং দিকনির্দেশক তীর চিহ্ন বসান।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৬২(গ)" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 3: First aid box empty -->
+      <a-entity position="-1 -0.5 -3.5" hotspot
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="ফাঁকা ফার্স্ট এইড" position="0 0.4 0" align="center"
+                color="#FFEB3B" width="2.5" side="double" font="#bn-font">
+        </a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#000000" opacity="0.85" width="3.5" height="2.5">
+            <a-text value="বিপদ: প্রাথমিক চিকিৎসা বক্সে কোনো সরঞ্জাম/ওষুধ নেই। দুর্ঘটনার সময় তা ব্যবহারের অনুপযোগী।
+ঝুঁকি স্তর: মাঝারি
+প্রয়োজনীয় ব্যবস্থা: সব ফার্স্ট এইড বক্স পূর্ণ রাখুন এবং মাসিক পরীক্ষা করুন। একজন প্রশিক্ষিত ফার্স্ট এইডার নিয়োগ করুন।
+আইনি বিধান: কারখানা আইন ১৯৬৫, ধারা ২৮" 
+                    position="-1.6 0.5 0.01" align="left" color="#ffffff" width="3.2" side="double" font="#bn-font">
+            </a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Summary text -->
+      <a-text value="আপনি মোট ১২টি ঝুঁকি পরিদর্শন করেছেন। প্রশিক্ষণ শেষ।" 
+              position="0 0.5 -2.5" align="center" color="#4CAF50" width="5" side="double" font="#bn-font">
+      </a-text>
+
+      <!-- Back to scene 1 -->
+      <a-entity position="-1 2.3 -3" class="clickable" nav-button
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #2196F3">
+        <a-text value="← পূর্ববর্তী" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font">
+        </a-text>
+      </a-entity>
+      <a-entity position="1 2.3 -3" class="clickable" restart-button
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #9E9E9E">
+        <a-text value="পুনরায় শুরু" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font">
+        </a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- CAMERA + CURSOR -->
+    <a-entity camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+      <a-entity cursor="fuse: true; fuseTimeout: 500"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01"
+                material="color: #ffffff; shader: flat">
+      </a-entity>
+    </a-entity>
+
+    <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
+  </a-scene>
+
+  <script>
+    // Toggle info panels on click
+    AFRAME.registerComponent('hotspot', {
+      init: function () {
+        this.el.addEventListener('click', function () {
+          const panel = this.querySelector('.info-panel');
+          if (panel) {
+            const wasVisible = panel.getAttribute('visible');
+            // Hide all info panels first
+            document.querySelectorAll('.info-panel').forEach(function(p) {
+              p.setAttribute('visible', false);
+            });
+            // Show only this one
+            if (!wasVisible) {
+              panel.setAttribute('visible', true);
+            }
+          }
+        });
+      }
+    });
+
+    // Scene navigation
+    AFRAME.registerComponent('nav-button', {
+      init: function () {
+        this.el.addEventListener('click', function () {
+          // Hide all scenes
+          document.querySelectorAll('.scene').forEach(function(s) {
+            s.setAttribute('visible', false);
+          });
+          
+          // Determine target: find current scene, go forward or back
+          const allScenes = ['scene1', 'scene2', 'scene3'];
+          const current = this.closest('.scene');
+          const currentId = current ? current.getAttribute('id') : 'scene1';
+          const currentIndex = allScenes.indexOf(currentId);
+          
+          var targetId;
+          // Check if this button has text "পরবর্তী" (next) or "পূর্ববর্তী" (previous)
+          var btnText = this.querySelector('a-text');
+          if (btnText && btnText.getAttribute('value').includes('পূর্ববর্তী')) {
+            targetId = allScenes[Math.min(currentIndex - 1, 2)];
+          } else {
+            targetId = allScenes[Math.min(currentIndex + 1, 2)];
+          }
+          
+          var target = document.getElementById(targetId);
+          if (target) {
+            target.setAttribute('visible', true);
+            // Reset all info panels in new scene
+            target.querySelectorAll('.info-panel').forEach(function(p) {
+              p.setAttribute('visible', false);
+            });
+          }
+        });
+      }
+    });
+
+    // Restart button
+    AFRAME.registerComponent('restart-button', {
+      init: function () {
+        this.el.addEventListener('click', function () {
+          document.querySelectorAll('.scene').forEach(function(s) {
+            s.setAttribute('visible', false);
+          });
+          document.getElementById('scene1').setAttribute('visible', true);
+          document.querySelectorAll('.info-panel').forEach(function(p) {
+            p.setAttribute('visible', false);
+          });
+        });
+      }
+    });
+
+    console.log('NOSHTRI VR Training: Factory Hazard Identification loaded');
+  </script>
+</body>
+</html>
