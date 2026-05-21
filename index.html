@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOSHTRI VR — নিরাপদ কর্মক্ষেত্র প্রশিক্ষণ</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥽</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #FF6F00;
+      --primary-light: #FFB74D;
+      --primary-dark: #E65100;
+      --bg: #0a0a1a;
+      --bg-card: #12122a;
+      --bg-card-hover: #1a1a3a;
+      --text: #e0e0e0;
+      --text-muted: #90A4AE;
+      --text-heading: #ffffff;
+      --accent-green: #4CAF50;
+      --accent-red: #F44336;
+      --accent-blue: #2196F3;
+      --border: #2a2a4a;
+      --card-radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Background gradient ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(255, 111, 0, 0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(33, 150, 243, 0.06) 0%, transparent 50%);
+      z-index: -1;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 600px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+    .logo-icon { font-size: 64px; display: block; margin-bottom: 16px; }
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: var(--text-heading);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    h1 .highlight { color: var(--primary); }
+    .subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-muted);
+      margin-top: 8px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .org-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 8px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── Section Title ── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin: 48px 0 24px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* ── Cards Grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 28px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent-blue));
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(255, 111, 0, 0.12);
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+    }
+    .card h3 {
+      font-size: 1.2rem;
+      color: var(--text-heading);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card .bn-title {
+      font-size: 1.1rem;
+      color: var(--primary-light);
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+    .card .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .card .tag {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .tag-scenes { background: rgba(33, 150, 243, 0.15); color: var(--accent-blue); }
+    .tag-hotspots { background: rgba(255, 111, 0, 0.15); color: var(--primary-light); }
+    .tag-new { background: rgba(76, 175, 80, 0.2); color: var(--accent-green); }
+
+    .card .launch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      align-self: flex-start;
+      font-family: inherit;
+    }
+    .card .launch-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 16px rgba(255, 111, 0, 0.35);
+    }
+
+    /* ── Stats Row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Instructions ── */
+    .instructions {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+    .instructions h3 {
+      color: var(--text-heading);
+      font-size: 1.15rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .instructions ol {
+      padding-left: 20px;
+      color: var(--text-muted);
+    }
+    .instructions ol li {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+    .instructions code {
+      background: rgba(255,255,255,0.06);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--primary-light);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer .footer-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+    footer .ilologo {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 20px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      header { padding: 40px 16px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <span class="logo-icon">🥽</span>
+  <h1>NOSHTRI <span class="highlight">VR</span></h1>
+  <p class="subtitle">নিমজ্জিত ভার্চুয়াল রিয়েলিটি প্রশিক্ষণ — নিরাপদ কর্মক্ষেত্র গড়ার জন্য<br>Virtual Reality Training for Safer Workplaces in Bangladesh</p>
+  <div class="org-badge">
+    <span>🏗️</span>
+    <span>ILO Bangladesh — NOSHTRI (National OSH Training & Research Initiative)</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══ STATS ═══ -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-number">1</div>
+      <div class="stat-label">VR Modules</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Training Scenes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">14</div>
+      <div class="stat-label">Interactive Hotspots</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3</div>
+      <div class="stat-label">360° Environments</div>
+    </div>
+  </div>
+
+  <!-- ═══ MODULES ═══ -->
+  <div class="section-title">
+    📚 প্রশিক্ষণ মডিউল &nbsp;|&nbsp; Training Modules
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- ── Fire Safety Basics ── -->
+    <a href="scenes/fire-safety-basics/vr-fire-safety-basics.html" class="card" target="_blank">
+      <div class="card-icon">🔥</div>
+      <h3>Fire Safety Basics</h3>
+      <div class="bn-title">অগ্নি নিরাপত্তা মৌলিক বিষয়</div>
+      <div class="tags">
+        <span class="tag tag-new">NEW</span>
+        <span class="tag tag-scenes">৩ দৃশ্য</span>
+        <span class="tag tag-hotspots">১৪টি হটস্পট</span>
+      </div>
+      <p>
+        অগ্নি নির্বাপক যন্ত্রের ব্যবহার, P.A.S.S. পদ্ধতি, জরুরি প্রস্থান পথ, উদ্ধার নির্দেশিকা,
+        অগ্নি ঝুঁকি শনাক্তকরণ ও প্রতিরোধমূলক ব্যবস্থা।<br>
+        <span style="color:var(--text-muted);font-size:0.85rem;">
+          Fire extinguisher (PASS method), evacuation routes, emergency exits, hazard identification.
+        </span>
+      </p>
+      <span class="launch-btn">
+        🥽 VR-তে খুলুন
+        <span style="font-size:1.1rem;">↗</span>
+      </span>
+    </a>
+
+    <!-- ── Coming Soon Placeholder ── -->
+    <div class="card" style="opacity:0.5; cursor:default;">
+      <div class="card-icon">⏳</div>
+      <h3>Coming Soon</h3>
+      <div class="bn-title">শীঘ্রই আসছে</div>
+      <div class="tags">
+        <span class="tag tag-scenes">নির্মাণাধীন</span>
+      </div>
+      <p>
+        পরবর্তী মডিউলসমূহ:<br>
+        • PPE (ব্যক্তিগত সুরক্ষা সরঞ্জাম)<br>
+        • Factory Hazard Identification<br>
+        • Labour Inspection Walkthrough<br>
+        • Chemical Safety
+      </p>
+      <span class="launch-btn" style="background:var(--border);cursor:default;">
+        🚧 নির্মাণাধীন
+      </span>
+    </div>
+
+  </div>
+
+  <!-- ═══ HOW TO USE ═══ -->
+  <div class="section-title">
+    🥽 ব্যবহার বিধি &nbsp;|&nbsp; How to Use
+  </div>
+
+  <div class="instructions">
+    <h3>📖 নির্দেশিকা (Instructions)</h3>
+    <ol>
+      <li><strong>ডেস্কটপ/ল্যাপটপে:</strong> মাউস টেনে চারপাশ দেখুন। নীল বিন্দুতে ক্লিক করুন তথ্য দেখতে। <code>Click</code></li>
+      <li><strong>মোবাইলে:</strong> স্ক্রিন টেনে চারপাশ দেখুন। নীল বিন্দুতে ট্যাপ করুন।</li>
+      <li><strong>Meta Quest / VR হেডসেটে:</strong> ব্রাউজারে লিংক ওপেন করুন। মাথা ঘুরিয়ে চারপাশ দেখুন। নীল বিন্দুতে gaze করুন (০.৬ সেকেন্ড ধরে তাকিয়ে থাকুন) = ক্লিক।</li>
+      <li><strong>হটস্পট:</strong> ঝলকানো রঙিন বিন্দুগুলোতে ক্লিক/gaze করুন — প্রতিটিতে বিস্তারিত বাংলা তথ্য পাবেন।</li>
+      <li><strong>দৃশ্য পরিবর্তন:</strong> নিচের "পরবর্তী"/"পূর্ববর্তী" বাটন ব্যবহার করে দৃশ্য বদলান।</li>
+    </ol>
+  </div>
+
+  <!-- ═══ TECH ═══ -->
+  <div class="section-title">
+    🛠️ প্রযুক্তি &nbsp;|&nbsp; Technology
+  </div>
+
+  <div class="instructions">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+      <div>
+        <h4 style="color:var(--primary-light);margin-bottom:8px;">✨ A-Frame WebXR</h4>
+        <p style="color:var(--text-muted);font-size:0.9rem;">
+          Mozilla-এর ওপেন সোর্স WebXR ফ্রেমওয়ার্ক। সব ডিভাইসে কাজ করে — Quest, Desktop, Mobile।
+        </p>
+      </div>
+      <div>
+        <h4 style="color:var(--primary-light);margin-bottom:8px;">🌐 GitHub Pages</h4>
+        <p style="color:var(--text-muted);font-size:0.9rem;">
+          ফ্রি হোস্টিং। কোন সার্ভার প্রয়োজন নেই। সরাসরি ব্রাউজার থেকে চালু হয়।
+        </p>
+      </div>
+      <div>
+        <h4 style="color:var(--primary-light);margin-bottom:8px;">🖼️ Gemini AI</h4>
+        <p style="color:var(--text-muted);font-size:0.9rem;">
+          360° পরিবেশের ছবি জেমিনি প্রো ইমেজ মডেল দিয়ে তৈরি (বাস্তব ছবি দিয়ে প্রতিস্থাপনযোগ্য)।
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-top">
+    <span class="ilologo">🏗️ NOSHTRI — ILO Bangladesh</span>
+    <a href="https://github.com/suhreed/noshtri-vr" target="_blank">GitHub Repository ↗</a>
+    <a href="https://hermes-agent.nousresearch.com" target="_blank">Built with Hermes Agent ↗</a>
+  </div>
+  <p>
+    International Labour Organization — Bangladesh Country Office<br>
+    © 2026 NOSHTRI. All rights reserved.
+  </p>
+</footer>
+
+</body>
+</html>
