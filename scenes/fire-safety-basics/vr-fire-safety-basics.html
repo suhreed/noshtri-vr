@@ -60,15 +60,25 @@
       <a-text value="• অগ্নি ঝুঁকি শনাক্তকরণ" position="0 -2.1 -3.8" align="center" color="#CFD8DC"
               font="#bengali-font" width="5" side="double" scale="0.55 0.55 0.55"></a-text>
 
-      <!-- Start button -->
-      <a-entity position="0 -3.0 -3.8" class="clickable"
-                geometry="primitive: plane; width: 2.6; height: 0.7"
+      <!-- Start button (manual) -->
+      <a-entity position="-1.4 -3.0 -3.8" class="clickable"
+                geometry="primitive: plane; width: 1.8; height: 0.65"
                 material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15"
                 animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true"
                 data-target="scene-1"
                 scene-btn>
         <a-text value="শুরু করুন ▶" position="0 0 0.01" align="center" color="#ffffff"
-                font="#bengali-font-bold" width="2.4" side="double" scale="0.6 0.6 0.6"></a-text>
+                font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text>
+      </a-entity>
+
+      <!-- Auto-Tour button -->
+      <a-entity position="1.4 -3.0 -3.8" class="clickable"
+                geometry="primitive: plane; width: 1.8; height: 0.65"
+                material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1500; dir: alternate; loop: true"
+                id="auto-tour-btn">
+        <a-text value="🔄 অটো ট্যুর" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text>
       </a-entity>
 
       <!-- Hint -->
@@ -664,6 +674,113 @@ Flammable near Heat Source
 
         console.log('Navigated to scene:', sceneId);
       }
+
+      // ── Auto-Guided Tour ──
+      var tourActive = false;
+      var tourTimer = null;
+      var tourStep = 0;
+
+      var tourItinerary = [
+        // Each step: [sceneId, rotationY, delaySec, clickHotspot?]
+        ["scene-1", -30, 6, true],     // PASS: Pin
+        ["scene-1", 30, 6, true],      // PASS: Aim
+        ["scene-1", 120, 5, true],     // Fire alarm
+        ["scene-2", 0, 5, true],       // Evacuation: exit sign
+        ["scene-2", 90, 5, true],      // Evacuation: floor markings
+        ["scene-2", -60, 5, true],     // Assembly / fire door
+        ["scene-3", 0, 5, true],       // Hazards: overload
+        ["scene-3", 120, 5, true],     // Hazards: blocked extinguisher
+        ["scene-3", -120, 5, true],    // Hazards: exposed wiring
+        ["scene-complete", 0, 6, false]
+      ];
+
+      function startAutoTour() {
+        if (tourActive) return;
+        tourActive = true;
+        tourStep = 0;
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#757575');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '⏹ থামান');
+        runTourStep();
+      }
+
+      function runTourStep() {
+        if (!tourActive) return;
+        if (tourStep >= tourItinerary.length) {
+          stopAutoTour();
+          return;
+        }
+
+        var step = tourItinerary[tourStep];
+        var sceneId = step[0];
+        var rotY = step[1];
+        var delay = step[2] * 1000;
+        var clickHotspot = step[3];
+
+        // Navigate
+        navigateToScene(sceneId);
+
+        // Rotate camera
+        setTimeout(function() {
+          if (!tourActive) return;
+          var cam = document.querySelector('[camera]');
+          if (cam) cam.setAttribute('rotation', '0 ' + rotY + ' 0');
+        }, 300);
+
+        // Click a hotspot after a moment
+        if (clickHotspot) {
+          setTimeout(function() {
+            if (!tourActive) return;
+            var scene = document.getElementById(sceneId);
+            if (scene) {
+              var hotspots = scene.querySelectorAll('[hotspot], [hazard]');
+              if (hotspots.length > 0) {
+                var idx = tourStep % hotspots.length;
+                hotspots[idx].dispatchEvent(new MouseEvent('click', {bubbles: true}));
+              }
+            }
+          }, 1500);
+        }
+
+        // Schedule next step
+        tourTimer = setTimeout(function() {
+          tourStep++;
+          runTourStep();
+        }, delay);
+
+        // Update status
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) {
+          tourText.setAttribute('value', '⏹ থামান (' + (tourStep+1) + '/' + tourItinerary.length + ')');
+        }
+      }
+
+      function stopAutoTour() {
+        tourActive = false;
+        if (tourTimer) {
+          clearTimeout(tourTimer);
+          tourTimer = null;
+        }
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#4CAF50');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '🔄 অটো ট্যুর');
+      }
+
+      // Wire auto-tour button
+      AFRAME.registerComponent('auto-tour', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            if (!tourActive) {
+              startAutoTour();
+            } else {
+              stopAutoTour();
+            }
+          });
+        }
+      });
+      // Attach auto-tour component to the button
+      document.getElementById('auto-tour-btn').setAttribute('auto-tour', '');
 
       console.log('🔥 NOSHTRI VR — Fire Safety Basics loaded');
     })();
