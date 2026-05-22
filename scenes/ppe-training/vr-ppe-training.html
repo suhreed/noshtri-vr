@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>ব্যক্তিগত সুরক্ষা সরঞ্জাম — NOSHTRI VR</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.6.0/aframe.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; overflow: hidden; font-family: 'Noto Sans Bengali', 'Inter', sans-serif; }
+    .a-canvas { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+  <a-scene>
+
+    <!-- ═══ ASSETS ═══ -->
+    <a-assets>
+      <img id="sky-intro" src="assets/ppe-storage-station.jpg" crossorigin="anonymous">
+      <img id="sky-correct" src="assets/worker-correct-ppe.jpg" crossorigin="anonymous">
+      <img id="sky-incorrect" src="assets/worker-incorrect-ppe.jpg" crossorigin="anonymous">
+      <img id="sky-storage" src="assets/ppe-storage-station.jpg" crossorigin="anonymous">
+
+      <a-asset-item id="bengali-font" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Regular.woff2"></a-asset-item>
+      <a-asset-item id="bengali-font-bold" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Bold.woff2"></a-asset-item>
+    </a-assets>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- SCENE INTRO -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <a-entity id="scene-intro" class="scene" visible="true">
+      <a-sky src="#sky-intro" rotation="0 -90 0"></a-sky>
+      <a-plane position="0 0 -4" width="8" height="6" color="#000000" opacity="0.6" side="double"></a-plane>
+
+      <a-text value="🥽 NOSHTRI VR" position="0 3.4 -3.8" align="center" color="#FF6F00"
+              font="#bengali-font-bold" width="6" side="double" scale="1.0 1.0 1.0"></a-text>
+
+      <a-text value="ব্যক্তিগত সুরক্ষা সরঞ্জাম" position="0 2.4 -3.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="7" side="double" scale="1.2 1.2 1.2"></a-text>
+      <a-text value="Personal Protective Equipment (PPE)" position="0 1.6 -3.8" align="center" color="#4CAF50"
+              font="#bengali-font" width="6" side="double" scale="0.7 0.7 0.7"></a-text>
+
+      <a-text value="এই প্রশিক্ষণে আপনি শিখবেন:" position="0 0.8 -3.8" align="center" color="#B0BEC5"
+              font="#bengali-font" width="5" side="double" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="• সঠিক PPE পরিধানের পদ্ধতি" position="0 0.1 -3.8" align="center" color="#CFD8DC"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="• ভুল/অসম্পূর্ণ PPE শনাক্তকরণ" position="0 -0.4 -3.8" align="center" color="#CFD8DC"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="• PPE সংরক্ষণ ও পরিদর্শন" position="0 -0.9 -3.8" align="center" color="#CFD8DC"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- Start button -->
+      <a-entity position="-1.4 -2.4 -3.8" class="clickable"
+                geometry="primitive: plane; width: 1.8; height: 0.65"
+                material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true"
+                data-target="scene-1" scene-btn>
+        <a-text value="শুরু করুন ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text>
+      </a-entity>
+
+      <!-- Auto-tour button -->
+      <a-entity position="1.4 -2.4 -3.8" class="clickable"
+                geometry="primitive: plane; width: 1.8; height: 0.65"
+                material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1500; dir: alternate; loop: true"
+                id="auto-tour-btn">
+        <a-text value="🔄 অটো ট্যুর" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text>
+      </a-entity>
+
+      <a-text value="নীল/সবুজ বিন্দুতে gaze/ক্লিক করুন তথ্য দেখতে" position="0 -3.5 -3.8"
+              align="center" color="#78909C" font="#bengali-font" width="5" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-text value="ILO Bangladesh — NOSHTRI" position="0 -4.0 -3.8" align="center" color="#546E7A"
+              font="#bengali-font" width="5" side="double" scale="0.35 0.35 0.35"></a-text>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- SCENE 1 — সঠিক PPE পরিধান (Correct PPE) -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <a-entity id="scene-1" class="scene" visible="false">
+      <a-sky src="#sky-correct" rotation="0 -60 0"></a-sky>
+
+      <a-text value="দৃশ্য ১: সঠিক PPE পরিধান" position="0 2.8 -2.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Correct PPE — প্রতিটি আইটেম সম্পর্কে জানুন" position="0 2.2 -2.8" align="center" color="#A5D6A7"
+              font="#bengali-font" width="5" side="double" scale="0.45 0.45 0.45"></a-text>
+
+      <!-- HOTSPOT 1: Safety Helmet (Hard Hat) — নীল -->
+      <a-entity position="2.0 1.8 -3.0" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="সেফটি হেলমেট" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.4">
+            <a-text value="সেফটি হেলমেট (Hard Hat)
+মাথায় আঘাত থেকে রক্ষা করে।
+• পড়ন্ত বস্তু থেকে সুরক্ষা
+• চুল মেশিনে জড়ানো থেকে
+রক্ষা
+• সঠিকভাবে মাথায় ফিট করুন
+• চিবুকের স্ট্র্যাপ বাঁধা
+থাকতে হবে
+• ফাটা/ক্ষতিগ্রস্ত হেলমেট
+পরিবর্তন করুন" position="-1.4 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 2: Safety Glasses — নীল -->
+      <a-entity position="0.5 1.5 -3.8" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="সেফটি গগলস" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.4">
+            <a-text value="সেফটি গগলস/গ্লাসেস
+চোখে রাসায়নিক ও কণা
+থেকে রক্ষা করে।
+• ধুলা-বালি, স্পার্ক, রাসায়নিক
+থেকে চোখ রক্ষা
+• ধোঁয়া ও ধোঁয়াটে পরিবেশে
+চোখ সুরক্ষিত রাখে
+• ঘাম হলে পরিষ্কার করুন
+• আঁচড় লাগলে পরিবর্তন করুন
+• ফিটিং ঠিক রাখুন" position="-1.4 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 3: Ear Plugs / Ear Muffs — নীল -->
+      <a-entity position="-1.5 1.6 -3.2" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 900; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="ইয়ার প্লাগ/মাফ" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.4">
+            <a-text value="ইয়ার প্লাগ / ইয়ার মাফ
+কানের সুরক্ষা (Hearing Protection)
+• উচ্চ শব্দের মেশিনের পাশে
+কাজ করার সময় বাধ্যতামূলক
+• ৮৫ ডেসিবেলের বেশি শব্দে
+প্রয়োজন
+• ইয়ার প্লাগ সঠিকভাবে
+কানে বসান
+• পুনর্ব্যবহারযোগ্য প্লাগ
+পরিষ্কার রাখুন" position="-1.4 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 4: Face Mask / Respirator — কমলা -->
+      <a-entity position="-1.0 0.8 -4.0" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1050; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="ফেস মাস্ক" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.4">
+            <a-text value="ফেস মাস্ক / রেসপিরেটর
+শ্বাসযন্ত্রের সুরক্ষা
+• ধুলা, ধোঁয়া, রাসায়নিক গ্যাস
+থেকে শ্বাসনালী রক্ষা
+• N95 বা উচ্চতর মান ব্যবহার
+করুন
+• নাক ও মুখ পুরোপুরি ঢাকতে
+হবে
+• ভেজা/নোংরা মাস্ক পরিবর্তন
+করুন
+• টাইট ফিট নিশ্চিত করুন" position="-1.4 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 5: Hi-Vis Vest + Gloves + Boots — সবুজ -->
+      <a-entity position="2.0 -0.2 -3.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="ভেস্ট + গ্লাভস + বুট" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.6">
+            <a-text value="হাই-ভিজ ভেস্ট + গ্লাভস + বুট
+দেহের অন্যান্য সুরক্ষা
+🟡 হাই-ভিজ ভেস্ট:
+সব সময় দৃশ্যমান থাকুন
+🟤 গ্লাভস (হাত gloves):
+কাটা/পোড়া/রাসায়নিক থেকে
+হাত রক্ষা
+🟤 সেফটি বুট:
+স্টিল-টো, পিছলানো রোধ,
+পড়ন্ত বস্তু থেকে পা রক্ষা" position="-1.4 0.9 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.46 0.46 0.46"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Nav -->
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4" material="color: #37474F; opacity: 0.7"
+                nav-btn data-target="scene-intro">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4" material="color: #FF6F00; opacity: 0.85"
+                nav-btn data-target="scene-2">
+        <a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- SCENE 2 — ভুল PPE শনাক্তকরণ (Find Missing/Wrong PPE) -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <a-entity id="scene-2" class="scene" visible="false">
+      <a-sky src="#sky-incorrect" rotation="0 -90 0"></a-sky>
+
+      <a-text value="দৃশ্য ২: ভুল/অসম্পূর্ণ PPE শনাক্ত করুন" position="0 2.8 -2.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Hazard Identification — কী ভুল আছে খুঁজুন!" position="0 2.2 -2.8" align="center" color="#EF9A9A"
+              font="#bengali-font" width="5" side="double" scale="0.45 0.45 0.45"></a-text>
+
+      <!-- HAZARD 1: No hard hat — লাল -->
+      <a-entity position="1.0 1.8 -3.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 800; dir: alternate; loop: true"
+                hazard>
+        <a-text value="🚫 হেলমেট নেই" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="⚠️ হেলমেট পরা নেই!
+No Hard Hat
+ঝুঁকি: মাথায় গুরুতর আঘাত,
+পড়ন্ত বস্তু, মেশিনে চুল
+জড়িয়ে যাওয়ার risk
+সমাধান: সবসময় সেফটি
+হেলমেট পরুন। চিবুকের
+স্ট্র্যাপ বাঁধা রাখুন।" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 2: No safety glasses — লাল -->
+      <a-entity position="-0.5 1.4 -3.8" class="clickable"
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 900; dir: alternate; loop: true"
+                hazard>
+        <a-text value="🚫 গগলস নেই" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="⚠️ চোখের সুরক্ষা নেই!
+No Safety Glasses
+ঝুঁকি: চোখে ধুলা, রাসায়নিক,
+স্পার্ক, ধাতব কণা → স্থায়ী
+চোখের ক্ষতি
+সমাধান: সবসময় সেফটি
+গগলস/গ্লাসেস পরুন। ফিটিং
+চেক করুন।" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 3: No gloves + loose sleeves near machine — লাল -->
+      <a-entity position="1.5 0.5 -3.0" class="clickable"
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 750; dir: alternate; loop: true"
+                hazard>
+        <a-text value="🚫 হাত gloves নেই" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="⚠️ হাতের সুরক্ষা নেই!
+No Gloves / Loose Clothing
+ঝুঁকি: কাটা/পোড়া/রাসায়নিকের
+সংস্পর্শ। ঢিলা কাপড় মেশিনে
+জড়িয়ে যেতে পারে!
+সমাধান: গ্লাভস পরুন, হাতার
+বোতাম বন্ধ রাখুন, ঢিলা
+কাপড় এড়িয়ে চলুন।" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 4: No safety boots — কমলা -->
+      <a-entity position="-1.0 -0.2 -3.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 850; dir: alternate; loop: true"
+                hazard>
+        <a-text value="🚫 সেফটি বুট নেই" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="⚠️ সেফটি বুট পরা নেই!
+No Safety Boots
+ঝুঁকি: পায়ে আঘাত, পড়ন্ত
+বস্তু, পিছলে পড়া, ধারালো
+বস্তুতে ফুটো
+সমাধান: স্টিল-টো সেফটি বুট
+পরুন। খোলা জুতা বা স্যান্ডেল
+কখনোই গ্রহণযোগ্য নয়।" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 5: No ear plugs — কমলা -->
+      <a-entity position="-1.8 1.8 -2.8" class="clickable"
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 950; dir: alternate; loop: true"
+                hazard>
+        <a-text value="🚫 ইয়ার প্লাগ নেই" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="⚠️ কানের সুরক্ষা নেই!
+No Hearing Protection
+ঝুঁকি: উচ্চ শব্দে কাজ করলে
+ধীরে ধীরে শ্রবণশক্তি কমে
+যায় — যা স্থায়ী!
+সমাধান: ৮৫dB+ শব্দের এলাকায়
+ইয়ার প্লাগ/মাফ পরুন।
+প্রতিদিন পরিষ্কার রাখুন।" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Nav -->
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4" material="color: #37474F; opacity: 0.7"
+                nav-btn data-target="scene-1">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4" material="color: #FF6F00; opacity: 0.85"
+                nav-btn data-target="scene-3">
+        <a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- SCENE 3 — PPE সংরক্ষণ ও পরিদর্শন স্টেশন -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <a-entity id="scene-3" class="scene" visible="false">
+      <a-sky src="#sky-storage" rotation="0 30 0"></a-sky>
+
+      <a-text value="দৃশ্য ৩: PPE সংরক্ষণ ও পরিদর্শন" position="0 2.8 -2.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="PPE Storage & Inspection Station" position="0 2.2 -2.8" align="center" color="#81C784"
+              font="#bengali-font" width="5" side="double" scale="0.45 0.45 0.45"></a-text>
+
+      <!-- HOTSPOT 1: PPE Cabinet — বেগুনি -->
+      <a-entity position="-1.5 1.2 -3.0" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #9C27B0; emissive: #9C27B0; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="PPE ক্যাবিনেট" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="PPE সংরক্ষণ ক্যাবিনেট
+• PPE আইটেম আলাদা আলাদাভাবে
+সাজিয়ে রাখুন
+• আকার অনুযায়ী সাজান (S/M/L)
+• পরিষ্কার ও শুষ্ক স্থানে রাখুন
+• সরাসরি সূর্যালোক এড়িয়ে চলুন
+• প্রতিটি আইটেমের জন্য আলাদা
+ড্রয়ার/শেলফ রাখুন" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 2: Inspection Checklist — বেগুনি -->
+      <a-entity position="1.0 1.5 -3.2" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #9C27B0; emissive: #9C27B0; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="পরিদর্শন চেকলিস্ট" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.4">
+            <a-text value="PPE পরিদর্শন চেকলিস্ট
+প্রতিটি ব্যবহারের আগে চেক করুন:
+✓ হেলমেট: ফাটা/ক্ষতিগ্রস্ত?
+✓ গগলস: আঁচড়/ফাটা?
+✓ মাস্ক: ছিদ্র/ভেজা?
+✓ গ্লাভস: ছেঁড়া/পাতলা?
+✓ বুট: তলায় ছিদ্র?
+✓ ভেস্ট: রিফ্লেক্টর অক্ষত?
+ক্ষতিগ্রস্ত PPE পরিবর্তন করুন" position="-1.4 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.46 0.46 0.46"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 3: PPE Dispenser / Sign-out — বেগুনি -->
+      <a-entity position="0.0 0.5 -3.8" class="clickable"
+                geometry="primitive: sphere; radius: 0.17"
+                material="color: #9C27B0; emissive: #9C27B0; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 950; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="PPE ইস্যু রেজিস্টার" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.4">
+            <a-text value="PPE ইস্যু ও রেকর্ড
+• প্রতিটি PPE ইস্যুর রেকর্ড
+রাখা বাধ্যতামূলক
+• কে, কখন, কী PPE নিয়েছে
+লিখে রাখুন
+• জীর্ণ PPE ফেরত নিন ও
+নতুন ইস্যু করুন
+• মাসিক স্টক নিন
+• Bangladesh Factory Act অনুযায়ী
+PPE বিনামূল্যে সরবরাহ করুন" position="-1.4 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.46 0.46 0.46"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 4: Disposal Bin — কমলা -->
+      <a-entity position="-2.0 0.0 -3.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.16"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1050; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="নিষ্পত্তি বিন" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="PPE নিষ্পত্তি (Disposal)
+• ক্ষতিগ্রস্ত PPE ফেলে দিন
+• একবার ব্যবহার্য PPE (ear
+plug, mask) প্রতিদিন পরিবর্তন
+• রাসায়নিক দূষিত PPE
+নিরাপদে ফেলুন
+• কখনো জীর্ণ PPE ব্যবহার
+করবেন না
+• প্রতিস্থাপনের জন্য রেকর্ড
+রাখুন" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HOTSPOT 5: Safety Poster — নীল -->
+      <a-entity position="1.8 2.0 -2.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.15"
+                material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="নিরাপত্তা পোস্টার" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.2">
+            <a-text value="নিরাপত্তা পোস্টার ও নির্দেশনা
+• PPE চার্ট দৃশ্যমান স্থানে
+টাঙিয়ে রাখুন
+• ছবি সহ নির্দেশনা ব্যবহারকারীকে
+সহায়তা করে
+• বাংলা ও ইংরেজি উভয় ভাষায়
+হওয়া উচিত
+• নিয়মিত আপডেট করুন
+• কর্মীদের PPE ব্যবহারে
+প্রশিক্ষণ দিন" position="-1.4 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Nav -->
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4" material="color: #37474F; opacity: 0.7"
+                nav-btn data-target="scene-2">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4" material="color: #4CAF50; opacity: 0.85"
+                nav-btn data-target="scene-complete">
+        <a-text value="শেষ ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- SCENE COMPLETE -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <a-entity id="scene-complete" class="scene" visible="false">
+      <a-sky color="#1a237e"></a-sky>
+
+      <a-text value="🎉 অভিনন্দন!" position="0 2.8 -4" align="center" color="#4CAF50"
+              font="#bengali-font-bold" width="6" side="double" scale="1.2 1.2 1.2"></a-text>
+      <a-text value="আপনি PPE প্রশিক্ষণ সফলভাবে সম্পন্ন করেছেন" position="0 2.0 -4" align="center" color="#ffffff"
+              font="#bengali-font" width="6" side="double" scale="0.55 0.55 0.55"></a-text>
+      <a-text value="PPE Training Complete" position="0 1.3 -4" align="center" color="#81C784"
+              font="#bengali-font" width="5" side="double" scale="0.45 0.45 0.45"></a-text>
+
+      <a-text value="✓ মূল শিক্ষণীয় বিষয়:" position="0 0.4 -4" align="center" color="#B0BEC5"
+              font="#bengali-font-bold" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="✓ মাথা থেকে পা পর্যন্ত সব PPE পরতে হবে" position="0 -0.3 -4" align="center" color="#A5D6A7"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ অনুপস্থিত/ভুল PPE শনাক্ত করে প্রতিকার করুন" position="0 -0.8 -4" align="center" color="#AED581"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ PPE নিয়মিত পরিদর্শন, পরিষ্কার ও সংরক্ষণ করুন" position="0 -1.3 -4" align="center" color="#C5E1A5"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ জীর্ণ PPE কখনো ব্যবহার করবেন না — পরিবর্তন করুন" position="0 -1.8 -4" align="center" color="#DCE775"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+
+      <!-- Restart -->
+      <a-entity position="0 -2.8 -4" class="clickable"
+                geometry="primitive: plane; width: 3.0; height: 0.6"
+                material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true"
+                nav-btn data-target="scene-intro">
+        <a-text value="🔄 পুনরায় শুরু করুন" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="2.8" side="double" scale="0.5 0.5 0.5"></a-text>
+      </a-entity>
+
+      <a-text value="ILO Bangladesh — NOSHTRI © 2026" position="0 -4.0 -4" align="center" color="#546E7A"
+              font="#bengali-font" width="5" side="double" scale="0.35 0.35 0.35"></a-text>
+    </a-entity>
+
+
+    <!-- ═══ CAMERA + CURSOR ═══ -->
+    <a-entity camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+      <a-entity cursor="fuse: true; fuseTimeout: 600"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.012"
+                material="color: #ffffff; shader: flat">
+        <a-animation attribute="scale" begin="fusing" end="fusing-done"
+                     from="1 1 1" to="12 12 1" dur="600"></a-animation>
+      </a-entity>
+    </a-entity>
+
+    <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
+
+  </a-scene>
+
+  <!-- ═══ JAVASCRIPT ═══ -->
+  <script>
+    (function() {
+
+      // ── Component: hotspot ──
+      AFRAME.registerComponent('hotspot', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+
+      // ── Component: hazard ──
+      AFRAME.registerComponent('hazard', {
+        init: function () {
+          var self = this;
+          var originalColor = this.el.getAttribute('material').color;
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            self.el.setAttribute('material', 'color', '#FF0000');
+            self.el.setAttribute('material', 'emissive', '#FF0000');
+            self.el.setAttribute('material', 'emissiveIntensity', '0.8');
+            setTimeout(function () {
+              self.el.setAttribute('material', 'color', originalColor);
+              self.el.setAttribute('material', 'emissive', originalColor);
+              self.el.setAttribute('material', 'emissiveIntensity', '0.3');
+            }, 400);
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+
+      // ── Component: nav-btn ──
+      AFRAME.registerComponent('nav-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+
+      // ── Component: scene-btn ──
+      AFRAME.registerComponent('scene-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+
+      // ── Navigate function ──
+      function navigateToScene(sceneId) {
+        var scenes = document.querySelectorAll('.scene');
+        for (var i = 0; i < scenes.length; i++) {
+          scenes[i].setAttribute('visible', false);
+        }
+        var target = document.getElementById(sceneId);
+        if (target) {
+          target.setAttribute('visible', true);
+        }
+        var camera = document.querySelector('[camera]');
+        if (camera) {
+          camera.setAttribute('rotation', '0 0 0');
+        }
+        console.log('Navigated to scene:', sceneId);
+      }
+
+      // ── Auto-Guided Tour ──
+      var tourActive = false;
+      var tourTimer = null;
+      var tourStep = 0;
+
+      var tourItinerary = [
+        ["scene-1", -30, 6, true],      // Helmet + goggles
+        ["scene-1", 60, 6, true],       // Ear plugs + mask
+        ["scene-1", 150, 5, true],      // Vest/gloves/boots
+        ["scene-2", 0, 5, true],        // No helmet + no glasses
+        ["scene-2", 90, 5, true],       // No gloves + loose sleeves
+        ["scene-2", -90, 5, true],      // No boots + no ear plugs
+        ["scene-3", 0, 5, true],        // PPE cabinet + inspection
+        ["scene-3", 90, 5, true],       // Sign-out + disposal
+        ["scene-3", -60, 5, true],      // Safety poster
+        ["scene-complete", 0, 6, false]
+      ];
+
+      function startAutoTour() {
+        if (tourActive) return;
+        tourActive = true;
+        tourStep = 0;
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#757575');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '⏹ থামান');
+        runTourStep();
+      }
+
+      function runTourStep() {
+        if (!tourActive) return;
+        if (tourStep >= tourItinerary.length) {
+          stopAutoTour();
+          return;
+        }
+        var step = tourItinerary[tourStep];
+        var sceneId = step[0], rotY = step[1], delay = step[2] * 1000, clickHotspot = step[3];
+
+        navigateToScene(sceneId);
+        setTimeout(function() {
+          if (!tourActive) return;
+          var cam = document.querySelector('[camera]');
+          if (cam) cam.setAttribute('rotation', '0 ' + rotY + ' 0');
+        }, 300);
+
+        if (clickHotspot) {
+          setTimeout(function() {
+            if (!tourActive) return;
+            var scene = document.getElementById(sceneId);
+            if (scene) {
+              var hotspots = scene.querySelectorAll('[hotspot], [hazard]');
+              if (hotspots.length > 0) {
+                var idx = tourStep % hotspots.length;
+                hotspots[idx].dispatchEvent(new MouseEvent('click', {bubbles: true}));
+              }
+            }
+          }, 1500);
+        }
+
+        tourTimer = setTimeout(function() {
+          tourStep++;
+          runTourStep();
+        }, delay);
+
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) {
+          tourText.setAttribute('value', '⏹ থামান (' + (tourStep+1) + '/' + tourItinerary.length + ')');
+        }
+      }
+
+      function stopAutoTour() {
+        tourActive = false;
+        if (tourTimer) { clearTimeout(tourTimer); tourTimer = null; }
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#4CAF50');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '🔄 অটো ট্যুর');
+      }
+
+      // Wire auto-tour button
+      AFRAME.registerComponent('auto-tour', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            if (!tourActive) startAutoTour();
+            else stopAutoTour();
+          });
+        }
+      });
+      document.getElementById('auto-tour-btn').setAttribute('auto-tour', '');
+
+      console.log('🥽 NOSHTRI VR — PPE Training loaded');
+    })();
+  </script>
+</body>
+</html>
