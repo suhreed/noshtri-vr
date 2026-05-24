@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>P.A.S.S. অগ্নি নির্বাপক সিমুলেটর — NOSHTRI VR</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.6.0/aframe.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; overflow: hidden; font-family: 'Noto Sans Bengali', 'Inter', sans-serif; }
+    .a-canvas { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+  <a-scene>
+
+    <!-- ═══ ASSETS ═══ -->
+    <a-assets>
+      <!-- Skybox images -->
+      <img id="sky-intro" src="assets/pass-intro.jpg" crossorigin="anonymous">
+      <img id="sky-simulator" src="assets/pass-simulator.jpg" crossorigin="anonymous">
+      <img id="sky-equipment" src="assets/equipment-station.jpg" crossorigin="anonymous">
+      <img id="sky-quiz" src="assets/quiz-room.jpg" crossorigin="anonymous">
+
+      <!-- Bengali fonts -->
+      <a-asset-item id="bengali-font" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Regular.woff2"></a-asset-item>
+      <a-asset-item id="bengali-font-bold" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Bold.woff2"></a-asset-item>
+    </a-assets>
+
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- SCENE INTRO -- PASS পদ্ধতি পরিচিতি                                -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <a-entity id="scene-intro" class="scene" visible="true">
+      <a-sky src="#sky-intro" rotation="0 -90 0"></a-sky>
+
+      <!-- Dark overlay -->
+      <a-plane position="0 0 -4" width="8" height="6" color="#000000" opacity="0.6" side="double"></a-plane>
+
+      <!-- NOSHTRI Logo -->
+      <a-text value="🥽 NOSHTRI VR" position="0 3.4 -3.8" align="center" color="#FF6F00"
+              font="#bengali-font-bold" width="6" side="double" scale="1.0 1.0 1.0"></a-text>
+
+      <!-- Main title -->
+      <a-text value="P.A.S.S. অগ্নি নির্বাপক" position="0 2.3 -3.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="7" side="double" scale="1.3 1.3 1.3"></a-text>
+      <a-text value="সিমুলেটর" position="0 1.6 -3.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="1.1 1.1 1.1"></a-text>
+
+      <!-- English subtitle -->
+      <a-text value="PASS Fire Extinguisher Simulator" position="0 0.8 -3.8" align="center" color="#FFB74D"
+              font="#bengali-font" width="6" side="double" scale="0.7 0.7 0.7"></a-text>
+
+      <!-- Learning objectives -->
+      <a-text value="এই সিমুলেটরে আপনি শিখবেন:" position="0 0.0 -3.8" align="center" color="#B0BEC5"
+              font="#bengali-font" width="5" side="double" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="🔥 P.A.S.S. পদ্ধতি -- ধাপে ধাপে অনুশীলন" position="0 -0.7 -3.8" align="center" color="#CFD8DC"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="🧯 অগ্নি নির্বাপক সরঞ্জাম শনাক্তকরণ" position="0 -1.2 -3.8" align="center" color="#CFD8DC"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="📋 আগুনের শ্রেণি অনুযায়ী সঠিক নির্বাপক নির্বাচন" position="0 -1.7 -3.8" align="center" color="#CFD8DC"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- Start button -->
+      <a-entity position="-1.4 -2.8 -3.8" class="clickable"
+                geometry="primitive: plane; width: 1.8; height: 0.65"
+                material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true"
+                data-target="scene-equipment"
+                scene-btn>
+        <a-text value="শুরু করুন ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text>
+      </a-entity>
+
+      <!-- Auto-Tour button -->
+      <a-entity position="1.4 -2.8 -3.8" class="clickable"
+                geometry="primitive: plane; width: 1.8; height: 0.65"
+                material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1500; dir: alternate; loop: true"
+                id="auto-tour-btn">
+        <a-text value="🔄 অটো ট্যুর" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text>
+      </a-entity>
+
+      <a-text value="লাল বিন্দুতে gaze/ক্লিক করুন তথ্য দেখতে" position="0 -3.8 -3.8" align="center" color="#78909C"
+              font="#bengali-font" width="5" side="double" scale="0.45 0.45 0.45"></a-text>
+      <a-text value="ILO Bangladesh -- NOSHTRI (c) 2026" position="0 -4.3 -3.8" align="center" color="#546E7A"
+              font="#bengali-font" width="5" side="double" scale="0.35 0.35 0.35"></a-text>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- SCENE EQUIPMENT -- অগ্নি নির্বাপক সরঞ্জাম স্টেশন                  -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <a-entity id="scene-equipment" class="scene" visible="false">
+      <a-sky src="#sky-equipment" rotation="0 -45 0"></a-sky>
+
+      <!-- Scene title -->
+      <a-text value="🧯 অগ্নি নির্বাপক সরঞ্জাম স্টেশন" position="0 2.8 -2.8" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Fire Extinguisher Equipment Station" position="0 2.2 -2.8" align="center" color="#FFB74D"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- EQUIPMENT 1: Fire Extinguisher (লাল) -->
+      <a-entity position="-2.8 0.8 -3.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.2"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.25"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="🧯 অগ্নি নির্বাপক" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.5" height="2.5">
+            <a-text value="অগ্নি নির্বাপক (Fire Extinguisher)
+পোর্টেবল চাপযুক্ত যন্ত্র যা
+ছোট আগুন নেভাতে ব্যবহৃত হয়।
+
+প্রকারভেদ:
+- জল (জল-ভিত্তিক) -- Class A
+- ফোম (ফেনা) -- Class A & B
+- CO₂ (কার্বন ডাই অক্সাইড) -- B & C
+- ড্রাই পাউডার -- A, B, C & D
+- ভেজা রাসায়নিক -- Class K
+
+মাসিক পরিদর্শন বাধ্যতামূলক।
+লাল রঙ সব নির্বাপক বোঝায়।" position="-1.6 0.8 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="3.2" side="double" scale="0.45 0.45 0.45"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- EQUIPMENT 2: Hose Reel (নীল) -->
+      <a-entity position="2.5 0.5 -3.2" class="clickable"
+                geometry="primitive: sphere; radius: 0.2"
+                material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.25"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="ফায়ার হোজ রিল 🌀" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.5" height="2.2">
+            <a-text value="ফায়ার হোজ রিল
+  (Fire Hose Reel)
+
+- বড় আগুনের জন্য ব্যবহৃত
+- পানির ধারাবাহিক সরবরাহ
+- শুধুমাত্র Class A আগুনের জন্য
+- ব্যবহার: পায়ের পাতার ভালভ খুলুন
+  -> পায়ের পাতার চাবি চাপুন
+  -> নজলটি আগুনের দিকে করুন
+
+!! আগুন বড় হলে নির্বাপক
+ব্যর্থ হলে হোজ রিল ব্যবহার করুন" position="-1.6 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="3.2" side="double" scale="0.45 0.45 0.45"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- EQUIPMENT 3: Fire Blanket (কমলা) -->
+      <a-entity position="-0.5 1.2 -3.8" class="clickable"
+                geometry="primitive: sphere; radius: 0.2"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.25"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 900; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="ফায়ার ব্ল্যাঙ্কেট 🟠" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.5" height="2.2">
+            <a-text value="ফায়ার ব্ল্যাঙ্কেট
+  (Fire Blanket)
+
+- অগ্নিরোধী কাপড়ের কম্বল
+- ছোট আগুন ঢেকে নেভায়
+- ব্যক্তির গায়ে আগুন
+  লাগলেও ব্যবহারযোগ্য
+  (STOP, DROP & ROLL)
+- Class A ও F (রান্নাঘর) আগুন
+- ব্যবহার: কানার দুটি হাতলে
+  টেনে বের করুন -> আগুনের
+  উপর পুরোপুরি বিছিয়ে দিন" position="-1.6 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="3.2" side="double" scale="0.45 0.45 0.45"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- EQUIPMENT 4: Sand Buckets (বাদামী) -->
+      <a-entity position="1.2 -0.2 -3.5" class="clickable"
+                geometry="primitive: sphere; radius: 0.2"
+                material="color: #795548; emissive: #795548; emissiveIntensity: 0.25"
+                animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1050; dir: alternate; loop: true"
+                hotspot>
+        <a-text value="বালতি বালি 🪣" position="0 0.5 0" align="center" color="#FFEB3B"
+                font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.5" height="2.2">
+            <a-text value="বালতি বালি (Sand Bucket)
+
+- সবচেয়ে সহজ ও সস্তা পদ্ধতি
+- Class D (ধাতব) আগুনের জন্য
+  সবচেয়ে কার্যকর
+- তেল/রাসায়নিক ছিটানোর
+  পরিষ্কারেও ব্যবহার হয়
+- ছোট আগুনের উপর বালি ছিটিয়ে
+  অক্সিজেন সরবরাহ বন্ধ করুন
+- বালতি সবসময় শুকনো বালি
+  দিয়ে ভর্তি রাখতে হবে
+- মাসিক পরিদর্শন প্রয়োজন" position="-1.6 0.6 0.01" align="left" color="#ffffff"
+                    font="#bengali-font" width="3.2" side="double" scale="0.45 0.45 0.45"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Instruction -->
+      <a-text value="সরঞ্জামের উপর ক্লিক করে বিস্তারিত জানুন" position="0 -0.8 -2.8" align="center" color="#78909C"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- Navigation -->
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4"
+                material="color: #37474F; opacity: 0.7"
+                nav-btn data-target="scene-intro">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4"
+                material="color: #4CAF50; opacity: 0.85"
+                nav-btn data-target="scene-pass-sim">
+        <a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- SCENE PASS-SIM -- P.A.S.S. ইন্টারেক্টিভ সিমুলেটর                  -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <a-entity id="scene-pass-sim" class="scene" visible="false">
+      <a-sky src="#sky-simulator" rotation="0 -60 0"></a-sky>
+
+      <!-- Scene title -->
+      <a-text value="🔥 P.A.S.S. পদ্ধতি -- ইন্টারেক্টিভ সিমুলেশন" position="0 2.8 -3.0" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="7" side="double" scale="0.75 0.75 0.75"></a-text>
+      <a-text value="ধাপে ধাপে নির্বাপক ব্যবহার অনুশীলন করুন" position="0 2.1 -3.0" align="center" color="#FFB74D"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- Step indicator bar -->
+      <a-entity id="step-indicator" position="0 1.4 -2.5">
+        <a-text value="⬜ P  ⬜ A  ⬜ S  ⬜ S" id="step-text" align="center" color="#78909C"
+                font="#bengali-font-bold" width="6" side="double" scale="0.6 0.6 0.6"></a-text>
+      </a-entity>
+
+      <!-- Fire visualization -->
+      <a-entity id="fire-container" position="-0.5 -0.2 -3.0">
+        <!-- Fire base (cone representing flames) -->
+        <a-entity id="fire-cone"
+                  geometry="primitive: cone; radiusBottom: 0.6; radiusTop: 0.05; height: 0.9"
+                  material="color: #FF4500; emissive: #FF4500; emissiveIntensity: 0.4"
+                  animation__flicker="property: scale; to: 1.1 1.15 1.1; dur: 200; dir: alternate; loop: true"
+                  position="0 0.45 0">
+        </a-entity>
+        <!-- Inner glow (yellow core) -->
+        <a-entity
+          geometry="primitive: cone; radiusBottom: 0.4; radiusTop: 0.02; height: 0.6"
+          material="color: #FFD700; emissive: #FFD700; emissiveIntensity: 0.6"
+          position="0 0.34 0">
+        </a-entity>
+        <!-- Glow under fire -->
+        <a-circle color="#FF6600" opacity="0.4" radius="0.8"
+                  material="transparent: true; opacity: 0.3" position="0 -0.05 0"
+                  animation__glow="property: scale; to: 1.1 1.1 1.1; dur: 500; dir: alternate; loop: true">
+        </a-circle>
+      </a-entity>
+
+      <!-- PASS step buttons (sequentially revealed) -->
+      <!-- P -- Pull the pin -->
+      <a-entity id="pass-p-btn" position="-2.5 0.5 -3.0" class="clickable pass-step"
+                geometry="primitive: plane; width: 1.0; height: 0.5"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.15; transparent: true; opacity: 1.0"
+                animation__pulse="property: scale; to: 1.08 1.08 1.08; dur: 800; dir: alternate; loop: true"
+                data-pass-step="1">
+        <a-text value="P -- পিন টানুন" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="0.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <!-- A -- Aim at base -->
+      <a-entity id="pass-a-btn" position="0.8 0.3 -3.0" class="clickable pass-step"
+                geometry="primitive: plane; width: 1.2; height: 0.5"
+                material="color: #757575; emissive: #757575; emissiveIntensity: 0.05; transparent: true; opacity: 0.4"
+                data-pass-step="2">
+        <a-text value="A -- নিচে লক্ষ্য করুন" position="0 0 0.01" align="center" color="#cccccc"
+                font="#bengali-font-bold" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <!-- S -- Squeeze -->
+      <a-entity id="pass-s1-btn" position="-1.8 -0.5 -3.2" class="clickable pass-step"
+                geometry="primitive: plane; width: 1.0; height: 0.5"
+                material="color: #757575; emissive: #757575; emissiveIntensity: 0.05; transparent: true; opacity: 0.4"
+                data-pass-step="3">
+        <a-text value="S -- চাপ দিন" position="0 0 0.01" align="center" color="#cccccc"
+                font="#bengali-font-bold" width="0.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <!-- S -- Sweep -->
+      <a-entity id="pass-s2-btn" position="1.5 -0.6 -3.2" class="clickable pass-step"
+                geometry="primitive: plane; width: 1.0; height: 0.5"
+                material="color: #757575; emissive: #757575; emissiveIntensity: 0.05; transparent: true; opacity: 0.4"
+                data-pass-step="4">
+        <a-text value="S -- পাশে চালান" position="0 0 0.01" align="center" color="#cccccc"
+                font="#bengali-font-bold" width="0.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <!-- PASS instruction feedback text -->
+      <a-text id="pass-feedback" value="👆 প্রথমে P -- পিন টানুন বোতামে ক্লিক করুন" 
+              position="0 -1.2 -3.0" align="center" color="#FFEB3B"
+              font="#bengali-font" width="6" side="double" scale="0.55 0.55 0.55"></a-text>
+
+      <!-- PASS completion panel -->
+      <a-entity id="pass-complete-panel" visible="false" position="0 -2.0 -3.0">
+        <a-plane color="#1b5e20" opacity="0.9" width="5.0" height="0.8">
+          <a-text value="✅ P.A.S.S. সম্পন্ন! আগুন নিভে গেছে! অভিনন্দন!" position="-2.3 0 0.01"
+                  align="left" color="#ffffff" font="#bengali-font-bold" width="4.8" side="double" scale="0.5 0.5 0.5"></a-text>
+        </a-plane>
+      </a-entity>
+
+      <!-- Navigation -->
+      <a-entity position="-3.0 -2.8 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4"
+                material="color: #37474F; opacity: 0.7"
+                nav-btn data-target="scene-equipment">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.8 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4"
+                material="color: #4CAF50; opacity: 0.85"
+                nav-btn data-target="scene-quiz">
+        <a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- SCENE QUIZ -- আগুনের শ্রেণি অনুযায়ী সঠিক নির্বাপক নির্বাচন        -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <a-entity id="scene-quiz" class="scene" visible="false">
+      <a-sky src="#sky-quiz" rotation="0 -30 0"></a-sky>
+
+      <!-- Quiz title -->
+      <a-text value="📋 কুইজ: সঠিক নির্বাপক নির্বাচন" position="0 2.8 -3.0" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="প্রতিটি আগুনের শ্রেণির জন্য সঠিক নির্বাপক বেছে নিন" position="0 2.2 -3.0" align="center" color="#FFB74D"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- Quiz question -->
+      <a-text id="quiz-question" value="প্রশ্ন ১/৫: কাঠ, কাগজ, কাপড়ের আগুনের (Class A) জন্য কোন নির্বাপক?" 
+              position="0 1.3 -3.0" align="center" color="#ffffff"
+              font="#bengali-font-bold" width="6" side="double" scale="0.55 0.55 0.55"></a-text>
+
+      <!-- Quiz score -->
+      <a-text id="quiz-score" value="স্কোর: 0/5" position="2.5 2.5 -3.0" align="center" color="#FFEB3B"
+              font="#bengali-font" width="2" side="double" scale="0.4 0.4 0.4"></a-text>
+
+      <!-- Quiz options -->
+      <a-entity id="quiz-opt-a" position="-2.5 0.5 -3.0" class="clickable quiz-option"
+                geometry="primitive: plane; width: 2.0; height: 0.7"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.1"
+                data-quiz-answer="1">
+        <a-text value="🔴 জল-ভিত্তিক (Water)" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <a-entity id="quiz-opt-b" position="0.2 0.5 -3.0" class="clickable quiz-option"
+                geometry="primitive: plane; width: 2.0; height: 0.7"
+                material="color: #9C27B0; emissive: #9C27B0; emissiveIntensity: 0.1"
+                data-quiz-answer="2">
+        <a-text value="🟣 ড্রাই পাউডার" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <a-entity id="quiz-opt-c" position="-2.5 -0.5 -3.0" class="clickable quiz-option"
+                geometry="primitive: plane; width: 2.0; height: 0.7"
+                material="color: #795548; emissive: #795548; emissiveIntensity: 0.1"
+                data-quiz-answer="3">
+        <a-text value="🟤 CO₂ (কার্বন ডাই অক্সাইড)" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <a-entity id="quiz-opt-d" position="0.2 -0.5 -3.0" class="clickable quiz-option"
+                geometry="primitive: plane; width: 2.0; height: 0.7"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.1"
+                data-quiz-answer="4">
+        <a-text value="🟠 ফোম (Foam)" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.9" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+
+      <!-- Quiz feedback -->
+      <a-text id="quiz-feedback" value="একটি উত্তর নির্বাচন করুন" 
+              position="0 -1.4 -3.0" align="center" color="#B0BEC5"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <!-- Next question button -->
+      <a-entity id="quiz-next-btn" position="0 -2.2 -3.0" class="clickable" visible="false"
+                geometry="primitive: plane; width: 2.0; height: 0.55"
+                material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1000; dir: alternate; loop: true"
+                quiz-next>
+        <a-text value="পরবর্তী প্রশ্ন ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="1.9" side="double" scale="0.5 0.5 0.5"></a-text>
+      </a-entity>
+
+      <!-- Navigation -->
+      <a-entity position="-3.0 -2.8 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4"
+                material="color: #37474F; opacity: 0.7"
+                nav-btn data-target="scene-pass-sim">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.8 -1.5" class="clickable"
+                geometry="primitive: plane; width: 1.4; height: 0.4"
+                material="color: #4CAF50; opacity: 0.85"
+                nav-btn data-target="scene-complete">
+        <a-text value="শেষ ▶" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font" width="1.3" side="double" scale="0.45 0.45 0.45"></a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- SCENE COMPLETE -- অভিনন্দন                                       -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <a-entity id="scene-complete" class="scene" visible="false">
+      <a-sky color="#1a237e"></a-sky>
+
+      <a-text value="🎉 অভিনন্দন!" position="0 2.8 -4" align="center" color="#FF6F00"
+              font="#bengali-font-bold" width="6" side="double" scale="1.2 1.2 1.2"></a-text>
+      <a-text value="আপনি P.A.S.S. সিমুলেটর সফলভাবে সম্পন্ন করেছেন" position="0 2.0 -4" align="center" color="#ffffff"
+              font="#bengali-font" width="6" side="double" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="PASS Fire Extinguisher Simulator Complete" position="0 1.3 -4" align="center" color="#FFB74D"
+              font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+
+      <a-text value="✓ মূল শিক্ষণীয় বিষয়:" position="0 0.4 -4" align="center" color="#B0BEC5"
+              font="#bengali-font-bold" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="✓ P -- Pull: সুরক্ষা পিন টেনে বের করুন" position="0 -0.3 -4" align="center" color="#A5D6A7"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ A -- Aim: আগুনের গোড়ায় নজল নির্দেশ করুন" position="0 -0.8 -4" align="center" color="#81C784"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ S -- Squeeze: হ্যান্ডেল চেপে নির্বাপক পদার্থ ছাড়ুন" position="0 -1.3 -4" align="center" color="#81C784"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ S -- Sweep: এক পাশ থেকে অন্য পাশে ঝাড়ুন" position="0 -1.8 -4" align="center" color="#81C784"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+      <a-text value="✓ ৪ প্রকার সরঞ্জাম -- নির্বাপক, হোজ, ব্ল্যাঙ্কেট, বালি" position="0 -2.3 -4" align="center" color="#81C784"
+              font="#bengali-font" width="6" side="double" scale="0.42 0.42 0.42"></a-text>
+
+      <!-- Restart button -->
+      <a-entity position="0 -3.2 -4" class="clickable"
+                geometry="primitive: plane; width: 3.0; height: 0.6"
+                material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15"
+                animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true"
+                nav-btn data-target="scene-intro">
+        <a-text value="🔄 পুনরায় শুরু করুন" position="0 0 0.01" align="center" color="#ffffff"
+                font="#bengali-font-bold" width="2.8" side="double" scale="0.5 0.5 0.5"></a-text>
+      </a-entity>
+
+      <a-text value="ILO Bangladesh -- NOSHTRI (c) 2026" position="0 -4.3 -4" align="center" color="#546E7A"
+              font="#bengali-font" width="5" side="double" scale="0.35 0.35 0.35"></a-text>
+    </a-entity>
+
+
+    <!-- ═══ CAMERA + CURSOR (GAZE CLICK) ═══ -->
+    <a-entity camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+      <a-entity cursor="fuse: true; fuseTimeout: 600"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.012"
+                material="color: #ffffff; shader: flat">
+        <a-animation attribute="scale" begin="fusing" end="fusing-done"
+                     from="1 1 1" to="12 12 1" dur="600"></a-animation>
+      </a-entity>
+    </a-entity>
+
+    <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
+
+  </a-scene>
+
+  <!-- ═══ JAVASCRIPT ═══ -->
+  <script>
+    (function() {
+
+      // ── PASS Simulator State ──
+      var passStep = 0;  // 0=not started, 1=P, 2=A, 3=S1, 4=all done
+
+      // ── Quiz State ──
+      var quizQuestions = [
+        {
+          q: 'প্রশ্ন ১/৫: কাঠ, কাগজ, কাপড়ের আগুনের (Class A) জন্য কোন নির্বাপক সঠিক?',
+          options: ['🔴 জল-ভিত্তিক (Water)', '🟣 ড্রাই পাউডার', '🟤 CO₂ (কার্বন)', '🟠 ফোম (Foam)'],
+          correct: 0,
+          explanation: '✅ সঠিক! জল-ভিত্তিক নির্বাপক Class A (কাঠ/কাগজ/কাপড়) আগুনের জন্য সবচেয়ে উপযুক্ত।'
+        },
+        {
+          q: 'প্রশ্ন ২/৫: তেল ও পেট্রোলিয়ামের আগুনের (Class B) জন্য কোন নির্বাপক উপযুক্ত?',
+          options: ['🔴 জল-ভিত্তিক', '🟠 ফোম (Foam)', '🟤 CO₂', '🟣 ড্রাই পাউডার'],
+          correct: 1,
+          explanation: '✅ সঠিক! ফোম ও CO₂ উভয়ই Class B আগুনের জন্য কার্যকর। ফোম আগুন ঢেকে বন্ধ করে।'
+        },
+        {
+          q: 'প্রশ্ন ৩/৫: বৈদ্যুতিক আগুনের (Class C) জন্য কোন নির্বাপক ব্যবহার করবেন?',
+          options: ['🔴 জল-ভিত্তিক', '🟣 ড্রাই পাউডার', '🟤 CO₂', '🟠 ফোম'],
+          correct: 2,
+          explanation: '✅ সঠিক! CO₂ বা ড্রাই পাউডার ব্যবহার করুন। জল ব্যবহার করলে বিদ্যুৎস্পৃষ্ট হতে পারেন!'
+        },
+        {
+          q: 'প্রশ্ন ৪/৫: ধাতব আগুনের (Class D) জন্য সবচেয়ে কার্যকর উপায় কী?',
+          options: ['🟣 ড্রাই পাউডার', '🟤 CO₂', '🪣 বালতি বালি', '🔴 জল-ভিত্তিক'],
+          correct: 2,
+          explanation: '✅ সঠিক! Class D ধাতব আগুনের জন্য বালি সবচেয়ে কার্যকর। জল ব্যবহার বিপজ্জনক!'
+        },
+        {
+          q: 'প্রশ্ন ৫/৫: রান্নাঘরের তেলের আগুনের (Class K/F) জন্য কোন নির্বাপক সর্বোত্তম?',
+          options: ['🟣 ড্রাই পাউডার', '🟠 ভেজা রাসায়নিক', '🟤 CO₂', '🟠 ফোম'],
+          correct: 1,
+          explanation: '✅ সঠিক! ভেজা রাসায়নিক Class K (রান্নাঘর) আগুনের জন্য বিশেষ। ফায়ার ব্ল্যাঙ্কেটও ব্যবহার করা যায়।'
+        }
+      ];
+      var quizIndex = 0;
+      var quizScore = 0;
+      var quizAnswered = false;
+
+
+      // ── Component: hotspot ──
+      AFRAME.registerComponent('hotspot', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+
+
+      // ── Component: nav-btn ──
+      AFRAME.registerComponent('nav-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            if (target === 'scene-pass-sim') {
+              resetPassSimulator();
+            }
+            navigateToScene(target);
+          });
+        }
+      });
+
+      // ── Component: scene-btn ──
+      AFRAME.registerComponent('scene-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+
+      // ── Component: pass-step ──
+      AFRAME.registerComponent('pass-step', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            var stepNum = parseInt(self.el.getAttribute('data-pass-step'));
+            handlePassStep(stepNum, self.el);
+          });
+        }
+      });
+
+
+      // ── PASS Simulator Logic ──
+
+      function resetPassSimulator() {
+        passStep = 0;
+        var btns = document.querySelectorAll('.pass-step');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].setAttribute('material', 'color', '#757575');
+          btns[i].setAttribute('material', 'emissive', '#757575');
+          btns[i].setAttribute('material', 'emissiveIntensity', '0.05');
+          btns[i].setAttribute('material', 'opacity', '0.4');
+        }
+        var pBtn = document.getElementById('pass-p-btn');
+        if (pBtn) {
+          pBtn.setAttribute('material', 'color', '#F44336');
+          pBtn.setAttribute('material', 'emissive', '#F44336');
+          pBtn.setAttribute('material', 'emissiveIntensity', '0.15');
+          pBtn.setAttribute('material', 'opacity', '1.0');
+        }
+        updateStepIndicator();
+        updateFireSize(1.0);
+        var fb = document.getElementById('pass-feedback');
+        if (fb) fb.setAttribute('value', '👆 প্রথমে P -- পিন টানুন বোতামে ক্লিক করুন');
+        var panel = document.getElementById('pass-complete-panel');
+        if (panel) panel.setAttribute('visible', false);
+      }
+
+      function updateStepIndicator() {
+        var steps = ['⬜ P', '⬜ A', '⬜ S', '⬜ S'];
+        var labels = ['P','A','S','S'];
+        for (var i = 0; i < passStep && i < 4; i++) {
+          steps[i] = '✅ ' + labels[i];
+        }
+        var text = document.getElementById('step-text');
+        if (text) text.setAttribute('value', steps.join('  '));
+      }
+
+      function updateFireSize(scaleFactor) {
+        var fireCone = document.getElementById('fire-cone');
+        if (fireCone) {
+          fireCone.setAttribute('scale', scaleFactor + ' ' + scaleFactor + ' ' + scaleFactor);
+          if (scaleFactor >= 1.0) {
+            fireCone.setAttribute('material', 'color', '#FF4500');
+            fireCone.setAttribute('material', 'emissive', '#FF4500');
+          } else if (scaleFactor >= 0.6) {
+            fireCone.setAttribute('material', 'color', '#FF6600');
+            fireCone.setAttribute('material', 'emissive', '#FF6600');
+          } else if (scaleFactor >= 0.3) {
+            fireCone.setAttribute('material', 'color', '#FF8800');
+            fireCone.setAttribute('material', 'emissive', '#FF8800');
+          } else if (scaleFactor > 0) {
+            fireCone.setAttribute('material', 'color', '#FFAA00');
+            fireCone.setAttribute('material', 'emissive', '#FFAA00');
+          }
+        }
+      }
+
+      function handlePassStep(stepNum, el) {
+        var expectedStep = passStep + 1;
+        var stepLabels = ['P -- পিন টানুন', 'A -- নিচে লক্ষ্য করুন', 'S -- চাপ দিন', 'S -- পাশে চালান'];
+
+        if (stepNum !== expectedStep) {
+          // Wrong order -- fire grows!
+          updateFireSize(1.3);
+          var fb = document.getElementById('pass-feedback');
+          if (fb) fb.setAttribute('value', '⚠️ ভুল ক্রম! প্রথমে ' + stepLabels[passStep] + ' করুন');
+          return;
+        }
+
+        // Correct step!
+        passStep = stepNum;
+
+        el.setAttribute('material', 'color', '#4CAF50');
+        el.setAttribute('material', 'emissive', '#4CAF50');
+        el.setAttribute('material', 'emissiveIntensity', '0.2');
+        el.setAttribute('material', 'opacity', '1.0');
+
+        updateStepIndicator();
+
+        var fb = document.getElementById('pass-feedback');
+        if (passStep === 1) {
+          updateFireSize(0.85);
+          if (fb) fb.setAttribute('value', '✅ পিন টানা হয়েছে! এখন A -- আগুনের গোড়ায় নজল নির্দেশ করুন');
+          var aBtn = document.getElementById('pass-a-btn');
+          if (aBtn) {
+            aBtn.setAttribute('material', 'color', '#FF9800');
+            aBtn.setAttribute('material', 'emissive', '#FF9800');
+            aBtn.setAttribute('material', 'emissiveIntensity', '0.15');
+            aBtn.setAttribute('material', 'opacity', '1.0');
+          }
+        } else if (passStep === 2) {
+          updateFireSize(0.65);
+          if (fb) fb.setAttribute('value', '✅ লক্ষ্য নির্ধারিত! এখন S -- হ্যান্ডেল চেপে নির্বাপক ছাড়ুন');
+          var s1Btn = document.getElementById('pass-s1-btn');
+          if (s1Btn) {
+            s1Btn.setAttribute('material', 'color', '#4CAF50');
+            s1Btn.setAttribute('material', 'emissive', '#4CAF50');
+            s1Btn.setAttribute('material', 'emissiveIntensity', '0.15');
+            s1Btn.setAttribute('material', 'opacity', '1.0');
+          }
+        } else if (passStep === 3) {
+          updateFireSize(0.35);
+          if (fb) fb.setAttribute('value', '✅ চাপ দেওয়া হয়েছে! এখন S -- আগুনের ওপর ঝাড়ুর মতো পাশে চালান');
+          var s2Btn = document.getElementById('pass-s2-btn');
+          if (s2Btn) {
+            s2Btn.setAttribute('material', 'color', '#E91E63');
+            s2Btn.setAttribute('material', 'emissive', '#E91E63');
+            s2Btn.setAttribute('material', 'emissiveIntensity', '0.15');
+            s2Btn.setAttribute('material', 'opacity', '1.0');
+          }
+        } else if (passStep === 4) {
+          updateFireSize(0.001);
+          var fireContainer = document.getElementById('fire-container');
+          if (fireContainer) fireContainer.setAttribute('visible', false);
+          if (fb) fb.setAttribute('value', '🎉 আগুন সম্পূর্ণ নিভে গেছে! P.A.S.S. পদ্ধতি সফল!');
+          var panel = document.getElementById('pass-complete-panel');
+          if (panel) panel.setAttribute('visible', true);
+        }
+      }
+
+
+      // ── Quiz Logic ──
+
+      function loadQuizQuestion(index) {
+        if (index >= quizQuestions.length) {
+          navigateToScene('scene-complete');
+          return;
+        }
+        quizAnswered = false;
+
+        var q = quizQuestions[index];
+
+        var qText = document.getElementById('quiz-question');
+        if (qText) qText.setAttribute('value', q.q);
+
+        var optA = document.getElementById('quiz-opt-a');
+        var optB = document.getElementById('quiz-opt-b');
+        var optC = document.getElementById('quiz-opt-c');
+        var optD = document.getElementById('quiz-opt-d');
+
+        if (optA) { var t = optA.querySelector('a-text'); if (t) t.setAttribute('value', q.options[0]); }
+        if (optB) { var t = optB.querySelector('a-text'); if (t) t.setAttribute('value', q.options[1]); }
+        if (optC) { var t = optC.querySelector('a-text'); if (t) t.setAttribute('value', q.options[2]); }
+        if (optD) { var t = optD.querySelector('a-text'); if (t) t.setAttribute('value', q.options[3]); }
+
+        var opts = [optA, optB, optC, optD];
+        var colors = ['#F44336', '#9C27B0', '#795548', '#FF9800'];
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i]) {
+            opts[i].setAttribute('material', 'color', colors[i]);
+            opts[i].setAttribute('material', 'emissive', colors[i]);
+            opts[i].setAttribute('material', 'emissiveIntensity', '0.1');
+            opts[i].setAttribute('material', 'opacity', '1.0');
+          }
+        }
+
+        var fb = document.getElementById('quiz-feedback');
+        if (fb) fb.setAttribute('value', 'একটি উত্তর নির্বাচন করুন');
+
+        var nextBtn = document.getElementById('quiz-next-btn');
+        if (nextBtn) nextBtn.setAttribute('visible', false);
+
+        var scoreText = document.getElementById('quiz-score');
+        if (scoreText) scoreText.setAttribute('value', 'স্কোর: ' + quizScore + '/5');
+      }
+
+      AFRAME.registerComponent('quiz-option', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            if (quizAnswered) return;
+            if (quizIndex >= quizQuestions.length) return;
+
+            quizAnswered = true;
+            var q = quizQuestions[quizIndex];
+            var answerIdx = parseInt(self.el.getAttribute('data-quiz-answer')) - 1;
+
+            var opts = [
+              document.getElementById('quiz-opt-a'),
+              document.getElementById('quiz-opt-b'),
+              document.getElementById('quiz-opt-c'),
+              document.getElementById('quiz-opt-d')
+            ];
+
+            for (var i = 0; i < opts.length; i++) {
+              if (opts[i]) {
+                if (i === q.correct) {
+                  opts[i].setAttribute('material', 'color', '#4CAF50');
+                  opts[i].setAttribute('material', 'emissive', '#4CAF50');
+                  opts[i].setAttribute('material', 'emissiveIntensity', '0.2');
+                } else if (i === answerIdx) {
+                  opts[i].setAttribute('material', 'color', '#F44336');
+                  opts[i].setAttribute('material', 'emissive', '#F44336');
+                  opts[i].setAttribute('material', 'emissiveIntensity', '0.3');
+                } else {
+                  opts[i].setAttribute('material', 'opacity', '0.4');
+                }
+              }
+            }
+
+            var fb = document.getElementById('quiz-feedback');
+            if (answerIdx === q.correct) {
+              quizScore++;
+              if (fb) fb.setAttribute('value', q.explanation);
+            } else {
+              if (fb) fb.setAttribute('value', '❌ ভুল! ' + q.explanation);
+            }
+
+            var scoreText = document.getElementById('quiz-score');
+            if (scoreText) scoreText.setAttribute('value', 'স্কোর: ' + quizScore + '/5');
+
+            var nextBtn = document.getElementById('quiz-next-btn');
+            if (nextBtn) {
+              nextBtn.setAttribute('visible', true);
+              var isLast = (quizIndex >= quizQuestions.length - 1);
+              var nextText = nextBtn.querySelector('a-text');
+              if (nextText) {
+                nextText.setAttribute('value', isLast ? '🎉 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন ▶');
+              }
+            }
+          });
+        }
+      });
+
+      AFRAME.registerComponent('quiz-next', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            quizIndex++;
+            loadQuizQuestion(quizIndex);
+          });
+        }
+      });
+
+
+      // ── Navigate function ──
+      function navigateToScene(sceneId) {
+        var scenes = document.querySelectorAll('.scene');
+        for (var i = 0; i < scenes.length; i++) {
+          scenes[i].setAttribute('visible', false);
+        }
+        var target = document.getElementById(sceneId);
+        if (target) {
+          target.setAttribute('visible', true);
+        }
+        var camera = document.querySelector('[camera]');
+        if (camera) {
+          camera.setAttribute('rotation', '0 0 0');
+        }
+        if (sceneId === 'scene-pass-sim') {
+          var fireContainer = document.getElementById('fire-container');
+          if (fireContainer) fireContainer.setAttribute('visible', true);
+          resetPassSimulator();
+        }
+        if (sceneId === 'scene-quiz') {
+          quizIndex = 0;
+          quizScore = 0;
+          loadQuizQuestion(0);
+        }
+        console.log('Navigated to:', sceneId);
+      }
+
+
+      // ── Auto-Guided Tour ──
+      var tourActive = false;
+      var tourTimer = null;
+      var tourStep = 0;
+
+      var tourItinerary = [
+        ["scene-equipment", -30, 8, true],
+        ["scene-equipment", 30, 7, true],
+        ["scene-equipment", 150, 7, true],
+        ["scene-pass-sim", -60, 9, true],
+        ["scene-pass-sim", 30, 10, true],
+        ["scene-quiz", -20, 8, true],
+        ["scene-quiz", 0, 6, false],
+        ["scene-complete", 0, 6, false]
+      ];
+
+      function startAutoTour() {
+        if (tourActive) return;
+        tourActive = true;
+        tourStep = 0;
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#757575');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '⏹ থামান');
+        var fireContainer = document.getElementById('fire-container');
+        if (fireContainer) fireContainer.setAttribute('visible', true);
+        resetPassSimulator();
+        runTourStep();
+      }
+
+      function runTourStep() {
+        if (!tourActive) return;
+        if (tourStep >= tourItinerary.length) { stopAutoTour(); return; }
+        var step = tourItinerary[tourStep];
+        var sceneId = step[0], rotY = step[1], delay = step[2] * 1000, clickHotspot = step[3];
+        navigateToScene(sceneId);
+        setTimeout(function() {
+          if (!tourActive) return;
+          var cam = document.querySelector('[camera]');
+          if (cam) cam.setAttribute('rotation', '0 ' + rotY + ' 0');
+        }, 300);
+        if (clickHotspot) {
+          setTimeout(function() {
+            if (!tourActive) return;
+            var scene = document.getElementById(sceneId);
+            if (scene) {
+              var hotspots = scene.querySelectorAll('[hotspot]');
+              if (hotspots.length > 0) {
+                var idx = tourStep % hotspots.length;
+                hotspots[idx].dispatchEvent(new MouseEvent('click', {bubbles: true}));
+              }
+            }
+          }, 1500);
+        }
+        tourTimer = setTimeout(function() { tourStep++; runTourStep(); }, delay);
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '⏹ থামান (' + (tourStep+1) + '/' + tourItinerary.length + ')');
+      }
+
+      function stopAutoTour() {
+        tourActive = false;
+        if (tourTimer) { clearTimeout(tourTimer); tourTimer = null; }
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#4CAF50');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '🔄 অটো ট্যুর');
+      }
+
+      AFRAME.registerComponent('auto-tour', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            if (!tourActive) startAutoTour(); else stopAutoTour();
+          });
+        }
+      });
+      document.getElementById('auto-tour-btn').setAttribute('auto-tour', '');
+
+      console.log('🔥 NOSHTRI VR -- PASS Fire Extinguisher Simulator loaded');
+
+    })();
+  </script>
+</body>
+</html>

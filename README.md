@@ -8,6 +8,7 @@
 | Module | Scenes | Hotspots | Status |
 |--------|--------|----------|--------|
 | [Fire Safety Basics](scenes/fire-safety-basics/vr-fire-safety-basics.html) 🔥 | 4 (intro + 3 training) | 14 | ✅ Live |
+| [PASS Fire Extinguisher Simulator](scenes/pass-simulator/vr-pass-simulator.html) 🧯 | 5 (intro + equipment + sim + quiz + complete) | 4 | ✅ Live |
 | More coming soon... | | | 🚧 |
 
 ## Tech
