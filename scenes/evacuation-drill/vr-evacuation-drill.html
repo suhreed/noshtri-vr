@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>অগ্নি নির্বাসন ড্রিল — NOSHTRI VR</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.6.0/aframe.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; overflow: hidden; font-family: 'Noto Sans Bengali', 'Inter', sans-serif; }
+    .a-canvas { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+  <a-scene>
+    <a-assets>
+      <img id="sky-intro" src="assets/factory-floor-init.jpg" crossorigin="anonymous">
+      <img id="sky-floor" src="assets/factory-floor-init.jpg" crossorigin="anonymous">
+      <img id="sky-blocked" src="assets/blocked-exit-corridor.jpg" crossorigin="anonymous">
+      <img id="sky-smoke" src="assets/smoky-stairs.jpg" crossorigin="anonymous">
+      <img id="sky-lift" src="assets/lift-and-injured.jpg" crossorigin="anonymous">
+      <img id="sky-assembly" src="assets/assembly-point-outside.jpg" crossorigin="anonymous">
+      <a-asset-item id="bengali-font" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Regular.woff2"></a-asset-item>
+      <a-asset-item id="bengali-font-bold" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Bold.woff2"></a-asset-item>
+    </a-assets>
+
+    <!-- SCENE INTRO -->
+    <a-entity id="scene-intro" class="scene" visible="true">
+      <a-sky src="#sky-intro" rotation="0 -90 0"></a-sky>
+      <a-plane position="0 0 -4" width="8" height="6" color="#000000" opacity="0.55" side="double"></a-plane>
+      <a-text value="NOSHTRI VR" position="0 3.4 -3.8" align="center" color="#FF6F00" font="#bengali-font-bold" width="6" side="double" scale="1.0 1.0 1.0"></a-text>
+      <a-text value="অগ্নি নির্বাসন ড্রিল" position="0 2.2 -3.8" align="center" color="#ffffff" font="#bengali-font-bold" width="7" side="double" scale="1.3 1.3 1.3"></a-text>
+      <a-text value="Fire Evacuation Drill" position="0 1.4 -3.8" align="center" color="#FFB74D" font="#bengali-font" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="এই প্রশিক্ষণে আপনি শিখবেন:" position="0 0.6 -3.8" align="center" color="#B0BEC5" font="#bengali-font" width="5" side="double" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="ফায়ার অ্যালার্ম শুনে সঠিক পদক্ষেপ নেওয়া" position="0 -0.1 -3.8" align="center" color="#CFD8DC" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="সবুজ EXIT চিহ্ন ও মেঝে চিহ্ন অনুসরণ করা" position="0 -0.6 -3.8" align="center" color="#CFD8DC" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="বাধাগ্রস্ত প্রস্থান পথ এড়িয়ে বিকল্প রুট খোঁজা" position="0 -1.1 -3.8" align="center" color="#CFD8DC" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="আহত সহকর্মীকে সাহায্য করা ও লিফট এড়ানো" position="0 -1.6 -3.8" align="center" color="#CFD8DC" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="নিরাপদ সমাবেশস্থলে পৌঁছানো" position="0 -2.1 -3.8" align="center" color="#CFD8DC" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-entity position="-1.4 -3.0 -3.8" class="clickable" geometry="primitive: plane; width: 1.8; height: 0.65" material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15" animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true" data-target="scene-1" scene-btn><a-text value="শুরু করুন ▶" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text></a-entity>
+      <a-entity position="1.4 -3.0 -3.8" class="clickable" geometry="primitive: plane; width: 1.8; height: 0.65" material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.15" animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1500; dir: alternate; loop: true" id="auto-tour-btn"><a-text value="🔄 অটো ট্যুর" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font-bold" width="1.7" side="double" scale="0.55 0.55 0.55"></a-text></a-entity>
+      <a-text value="রঙিন বিন্দুতে gaze/ক্লিক করুন তথ্য দেখতে" position="0 -3.8 -3.8" align="center" color="#78909C" font="#bengali-font" width="5" side="double" scale="0.45 0.45 0.45"></a-text>
+      <a-text value="ILO Bangladesh - NOSHTRI" position="0 -4.3 -3.8" align="center" color="#546E7A" font="#bengali-font" width="5" side="double" scale="0.4 0.4 0.4"></a-text>
+    </a-entity>
+
+    <!-- SCENE 1: Fire Alarm Activates -->
+    <a-entity id="scene-1" class="scene" visible="false">
+      <a-sky src="#sky-floor" rotation="0 -45 0"></a-sky>
+      <a-text value="দৃশ্য ১: ফায়ার অ্যালার্ম বেজে উঠল" position="0 2.8 -2.8" align="center" color="#ffffff" font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Fire Alarm Activates" position="0 2.2 -2.8" align="center" color="#FFB74D" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-entity position="-2.8 1.2 -3.5" class="clickable" geometry="primitive: sphere; radius: 0.18" material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.25" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 800; dir: alternate; loop: true" hotspot><a-text value="ফায়ার অ্যালার্ম" position="0 0.5 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.7 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.3"><a-text value="অ্যালার্ম শুনলেই:
+কাজ ফেলে দিন
+মেশিন বন্ধ করুন
+অ্যালার্ম টিপে সবাইকে সতর্ক করুন
+শান্ত থাকুন, দ্রুত কিন্তু শৃঙ্খলাবদ্ধভাবে সরুন" position="-1.4 0.7 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="2.0 1.5 -3.0" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true" hotspot><a-text value="সবুজ EXIT চিহ্ন" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="সবুজ EXIT চিহ্ন অনুসরণ করুন
+চারপাশের সবুজ EXIT চিহ্ন দেখুন
+দ্রুততম প্রস্থানের দিকে ইঙ্গিত করে
+অন্ধকারেও ফটোলুমিনেসেন্ট হওয়ায় দেখা যায়
+লিফটের দিকে নয় - সিঁড়ির দিকে নিয়ে যায়" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-0.5 -0.3 -4.0" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true" hotspot><a-text value="মেঝের নির্দেশিকা" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="মেঝের নির্বাসন নির্দেশিকা
+মেঝেতে সবুজ/হলুদ তীরচিহ্ন প্রস্থানের দিক নির্দেশ করে
+ফটোলুমিনেসেন্ট - অন্ধকারে উজ্জ্বল হয়
+ধোঁয়ার সময় নিচু হয়ে এই চিহ্ন দেখে পথ চিনুন
+সবসময় চিহ্নের দিকেই অগ্রসর হোন" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="1.5 -0.1 -3.8" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #795548; emissive: #795548; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1200; dir: alternate; loop: true" hotspot><a-text value="ফায়ার ডোর" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="ফায়ার ডোর (Fire Door)
+আগুন ও ধোঁয়ার বিস্তার রোধ করে
+স্বয়ংক্রিয়ভাবে বন্ধ হয়
+দিয়ে যাওয়ার পর বন্ধ হতে দেবেন - খোলা রাখবেন না!
+ফায়ার ডোর কখনো তালাবদ্ধ নয় - ধাক্কা দিয়ে খোলে" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-1.8 1.8 -2.8" class="clickable" geometry="primitive: sphere; radius: 0.15" material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 900; dir: alternate; loop: true" hotspot><a-text value="জরুরি আলো" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="জরুরি আলো সক্রিয়
+বিদ্যুৎ বিভ্রাটে স্বয়ংক্রিয়ভাবে জ্বলে ওঠে
+নির্বাসন পথ আলোকিত রাখে
+ন্যূনতম ৯০ মিনিট আলো দেয়
+সবসময় জরুরি আলোর পথে অগ্রসর হোন
+মাসিক পরীক্ষা বাধ্যতামূলক" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #37474F; opacity: 0.7" nav-btn data-target="scene-intro"><a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #FF6F00; opacity: 0.85" nav-btn data-target="scene-2"><a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+    </a-entity>
+
+    <!-- SCENE 2: Blocked Exit & Smoke -->
+    <a-entity id="scene-2" class="scene" visible="false">
+      <a-sky src="#sky-blocked" rotation="0 -30 0"></a-sky>
+      <a-text value="দৃশ্য ২: বাধাগ্রস্ত প্রস্থান ও ধোঁয়া" position="0 2.8 -2.8" align="center" color="#ffffff" font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Blocked Exit & Smoke" position="0 2.2 -2.8" align="center" color="#FFB74D" font="#bengali-font" width="6" side="double" scale="0.45 0.45 0.45"></a-text>
+      <a-entity position="2.0 0.3 -3.8" class="clickable" geometry="primitive: sphere; radius: 0.18" material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3" animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 700; dir: alternate; loop: true" hazard><a-text value="প্রস্থান পথ বন্ধ" position="0 0.5 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.7 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.3"><a-text value="প্রস্থান পথ বাধাগ্রস্ত!
+মালপত্রে ভর্তি করিডোর
+মূল প্রস্থান বন্ধ - আতঙ্কিত হবেন না
+বিকল্প প্রস্থানের সন্ধান করুন
+কখনোই মালপত্র সরানোর চেষ্টা করবেন না - সময় নষ্ট
+নিকটস্থ অন্য EXIT চিহ্ন অনুসরণ করুন
+প্রস্তুত থাকুন: আগে থেকেই প্রস্থান মানচিত্র জানুন" position="-1.4 0.7 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-1.8 0.6 -3.5" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true" hotspot><a-text value="বিকল্প নির্বাসন পথ" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="বিকল্প পথ খুঁজুন
+দেয়ালে/সিলিং এ বিকল্প EXIT চিহ্ন দেখুন
+মেঝের তীরচিহ্ন অনুসরণ করুন
+ভবনের নির্বাসন মানচিত্র মনে রাখুন (প্রবেশপথে থাকে)
+নিচের তলায় নামার সিঁড়ি খুঁজুন
+বিকল্প প্রস্থানের অবস্থান সবসময় জেনে রাখুন" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="0.5 1.8 -3.2" class="clickable" geometry="primitive: sphere; radius: 0.18" material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3" animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 800; dir: alternate; loop: true" hazard><a-text value="ধোঁয়া ছড়াচ্ছে" position="0 0.5 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.7 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.3"><a-text value="ধোঁয়া ছড়াচ্ছে - সাবধান!
+ধোঁয়া আগুনের চেয়েও বেশি বিপজ্জনক - দম বন্ধ হতে পারে
+নিচু হয়ে চলুন - পরিষ্কার বাতাস নিচের দিকে থাকে
+ভেজা কাপড় দিয়ে নাক-মুখ ঢেকে রাখুন
+হামাগুড়ি দিয়ে এগোন
+ধোঁয়ায় পূর্ণ হলে আরও নিচু হয়ে যান" position="-1.4 0.7 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-0.5 -0.5 -4.0" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true" hotspot><a-text value="নিচু হয়ে চলুন" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="ধোঁয়ায় নিচু হয়ে চলা
+নিচু হয়ে/হামাগুড়ি দিয়ে যান - পরিষ্কার বাতাস নিচে
+মাথা মেঝে থেকে ৩০-৬০ সেমি উপরে রাখুন
+মেঝের ফটোলুমিনেসেন্ট চিহ্ন অনুসরণ করুন
+এক হাত সামনে রেখে পথ পরীক্ষা করুন
+শান্ত থাকুন, নিয়মিত শ্বাস নিন" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-2.5 1.5 -2.5" class="clickable" geometry="primitive: sphere; radius: 0.15" material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 950; dir: alternate; loop: true" hotspot><a-text value="জরুরি আলোর পথ" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="জরুরি আলো পথ দেখায়
+জরুরি আলোর লাইন বরাবর অগ্রসর হোন
+ধোঁয়ার মধ্যেও আলো দৃশ্যমান
+প্রস্থানের পথ আলোকিত রাখে
+দরকারি দিকনির্দেশনা দেয়
+আলোর ধারা ধরে এগিয়ে যান - নিরাপদ প্রস্থানের দিকে নিয়ে যাবে" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #37474F; opacity: 0.7" nav-btn data-target="scene-1"><a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #FF6F00; opacity: 0.85" nav-btn data-target="scene-3"><a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+    </a-entity>
+
+    <!-- SCENE 3: Injured Colleague & Lift Danger -->
+    <a-entity id="scene-3" class="scene" visible="false">
+      <a-sky src="#sky-lift" rotation="0 -60 0"></a-sky>
+      <a-text value="দৃশ্য ৩: আহত সহকর্মী ও লিফট বিপদ" position="0 2.8 -2.8" align="center" color="#ffffff" font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Injured Colleague & Lift Danger" position="0 2.2 -2.8" align="center" color="#FFB74D" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-entity position="-1.5 -0.3 -3.8" class="clickable" geometry="primitive: sphere; radius: 0.18" material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true" hotspot><a-text value="আহত সহকর্মী" position="0 0.5 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.7 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.3"><a-text value="আহত সহকর্মীকে সাহায্য করুন
+শান্ত থাকুন, সহকর্মীকে আশ্বস্ত করুন
+হালকা আঘাত পেলে কাঁধে ভর দিয়ে নিয়ে যান
+গুরুতর আঘাত পেলে টেনে নিয়ে যান - জীবন বাঁচান প্রথম
+একা না পারেন - সাহায্য চান (চিৎকার/শিস)
+নিজের জীবন বিপন্ন করবেন না" position="-1.4 0.7 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="2.2 0.8 -3.2" class="clickable" geometry="primitive: sphere; radius: 0.18" material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3" animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 600; dir: alternate; loop: true" hazard><a-text value="লিফট নিষিদ্ধ!" position="0 0.5 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.7 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.3"><a-text value="লিফট ব্যবহার নিষিদ্ধ!
+আগুনে লিফটের বৈদ্যুতিক সিস্টেম বিকল হতে পারে
+লিফটে আটকে পড়ার ঝুঁকি
+ধোঁয়া লিফট শ্যাফ্ট দিয়ে উপরের তলায় ছড়ায়
+সবসময় সিঁড়ি ব্যবহার করুন
+নিয়ম: FIRE = STAIRS, NEVER ELEVATOR!" position="-1.4 0.7 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="0.5 1.2 -2.8" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #795548; emissive: #795548; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true" hotspot><a-text value="ফায়ার ডোর বন্ধ" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="ফায়ার ডোর স্বয়ংক্রিয় বন্ধ
+আগুন ও ধোঁয়ার বিস্তার রোধে ফায়ার ডোর স্বয়ংক্রিয় বন্ধ হয়
+দিয়ে যাওয়ার পর ডোর বন্ধ হতে দিন - খোলা রাখবেন না
+ফায়ার ডোর আপনার জীবন বাঁচায় - সম্মান করুন
+নিয়মিত ডোর চেক করুন - যেন ঠিকমতো কাজ করে" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-0.5 -0.2 -3.0" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #9C27B0; emissive: #9C27B0; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true" hotspot><a-text value="সহায়তা পদ্ধতি" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="সঠিক সহায়তা পদ্ধতি
+কাঁধে ভর দিয়ে হাঁটা: হালকা আঘাত পেলে
+ফায়ারম্যান ক্যারি: অচেতন ব্যক্তিকে কাঁধে নেওয়া
+টেনে নেওয়া: পা ধরে টেনে নিয়ে যাওয়া (শেষ উপায়)
+দুইজনে মিলে নেওয়া: উভয় হাত ও পা ধরে নেওয়া
+নিজের নিরাপত্তা নিশ্চিত করুন" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-2.5 1.3 -2.5" class="clickable" geometry="primitive: sphere; radius: 0.15" material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 900; dir: alternate; loop: true" hotspot><a-text value="জরুরি ফোন" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="জরুরি যোগাযোগ
+ফায়ার সার্ভিস: ৯৯৯ (জাতীয় জরুরি সেবা)
+ফ্যাক্টরি ফায়ার ওয়ার্ডেনকে ফোন করুন
+নিরাপদ স্থান থেকে ফোন করুন - আগুনের ভিতর থেকে নয়
+আঘাতের তথ্য দিন - কোথায়, কতজন, কী অবস্থা" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #37474F; opacity: 0.7" nav-btn data-target="scene-2"><a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #FF6F00; opacity: 0.85" nav-btn data-target="scene-4"><a-text value="পরবর্তী ▶" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+    </a-entity>
+
+    <!-- SCENE 4: Assembly Point -->
+    <a-entity id="scene-4" class="scene" visible="false">
+      <a-sky src="#sky-assembly" rotation="0 180 0"></a-sky>
+      <a-text value="দৃশ্য ৪: নিরাপদ সমাবেশস্থল" position="0 2.8 -2.8" align="center" color="#ffffff" font="#bengali-font-bold" width="6" side="double" scale="0.8 0.8 0.8"></a-text>
+      <a-text value="Assembly Point - Safe Distance" position="0 2.2 -2.8" align="center" color="#FFB74D" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-entity position="-1.5 0.5 -3.5" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #9C27B0; emissive: #9C27B0; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1100; dir: alternate; loop: true" hotspot><a-text value="জড়ো হওয়ার স্থান" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="নিরাপদ সমাবেশস্থল
+নির্ধারিত মিলনস্থানে দ্রুত পৌঁছান
+ভবন থেকে নিরাপদ দূরত্বে - ন্যূনতম ৫০ মিটার
+বিভাগ অনুযায়ী সারিবদ্ধ হোন
+শান্ত থাকুন - পরিস্থিতি বোঝার চেষ্টা করুন
+ফায়ার ওয়ার্ডেনের নির্দেশ মানুন" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="1.2 0.3 -3.2" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true" hotspot><a-text value="ফায়ার ওয়ার্ডেন" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="ফায়ার ওয়ার্ডেনের ভূমিকা
+উপস্থিতি যাচাই করেন
+নিখোঁজ ব্যক্তিদের তথ্য নেন
+জরুরি সেবাকে নির্দেশনা দেন
+পুনরায় প্রবেশ নিষেধাজ্ঞা জারি করেন
+ওয়ার্ডেনের নির্দেশ মানা সব শ্রমিকের কর্তব্য" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-0.5 -0.2 -4.0" class="clickable" geometry="primitive: sphere; radius: 0.15" material="color: #2196F3; emissive: #2196F3; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 950; dir: alternate; loop: true" hotspot><a-text value="উপস্থিতি যাচাই" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="উপস্থিতি যাচাইকরণ
+প্রতিটি বিভাগ আলাদাভাবে নাম ডাকুন
+ভিজিটর/ঠিকাদারদেরও গণনা করুন
+নিখোঁজ ব্যক্তির শেষ অবস্থান জানার চেষ্টা করুন
+ফায়ার সার্ভিসে নিখোঁজের তথ্য দিন
+নিখোঁজের জন্য পুনরায় ভবনে যাবেন না" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="2.0 1.2 -2.5" class="clickable" geometry="primitive: sphere; radius: 0.16" material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.25" animation__pulse="property: scale; to: 1.25 1.25 1.25; dur: 800; dir: alternate; loop: true" hotspot><a-text value="পুনরায় প্রবেশ নয়" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="পুনরায় প্রবেশ করবেন না!
+ফায়ার ডিপার্টমেন্টের অনুমতি ছাড়া ভবনে ফিরবেন না - মারাত্মক বিপজ্জনক
+মূল্যবান জিনিসের জন্য ফিরে যাবেন না - জীবন বড়
+জানালা দিয়ে লাফাবেন না
+নিরাপদ স্থানে অপেক্ষা করুন
+কর্তৃপক্ষের নির্দেশের জন্য প্রস্তুত থাকুন" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="0.0 1.5 -3.0" class="clickable" geometry="primitive: sphere; radius: 0.15" material="color: #4CAF50; emissive: #4CAF50; emissiveIntensity: 0.2" animation__pulse="property: scale; to: 1.2 1.2 1.2; dur: 1000; dir: alternate; loop: true" hotspot><a-text value="নিরাপদ দূরত্ব" position="0 0.45 0" align="center" color="#FFEB3B" font="#bengali-font" width="3" side="double" scale="0.55 0.55 0.55"></a-text><a-entity class="info-panel" visible="false" position="0 -0.65 0"><a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.0"><a-text value="নিরাপদ দূরত্ব বজায় রাখুন
+ভবন থেকে ন্যূনতম ৫০ মিটার দূরে অবস্থান করুন
+অগ্নি নির্বাপক যান চলাচলের পথ বন্ধ করবেন না
+জরুরি গাড়ির জন্য রাস্তা পরিষ্কার রাখুন
+বাতাসের উল্টো দিকে দাঁড়ান - ধোঁয়া ও গ্যাস থেকে দূরে
+নির্ধারিত সমাবেশস্থলের বাইরে যাবেন না" position="-1.4 0.4 0.01" align="left" color="#ffffff" font="#bengali-font" width="2.8" side="double" scale="0.48 0.48 0.48"></a-text></a-plane></a-entity></a-entity>
+      <a-entity position="-3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #37474F; opacity: 0.7" nav-btn data-target="scene-3"><a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+      <a-entity position="3.0 -2.5 -1.5" class="clickable" geometry="primitive: plane; width: 1.2; height: 0.4" material="color: #4CAF50; opacity: 0.85" nav-btn data-target="scene-complete"><a-text value="শেষ ▶" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font" width="1.1" side="double" scale="0.45 0.45 0.45"></a-text></a-entity>
+    </a-entity>
+
+    <!-- SCENE COMPLETE -->
+    <a-entity id="scene-complete" class="scene" visible="false">
+      <a-sky color="#1a237e"></a-sky>
+      <a-text value="অভিনন্দন!" position="0 3.0 -4" align="center" color="#FF6F00" font="#bengali-font-bold" width="6" side="double" scale="1.2 1.2 1.2"></a-text>
+      <a-text value="আপনি অগ্নি নির্বাসন ড্রিল সফলভাবে সম্পন্ন করেছেন" position="0 2.2 -4" align="center" color="#ffffff" font="#bengali-font" width="6" side="double" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="Evacuation Drill Complete" position="0 1.5 -4" align="center" color="#FFB74D" font="#bengali-font" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="মূল্যায়ন - আপনার সিদ্ধান্তগুলি:" position="0 0.6 -4" align="center" color="#B0BEC5" font="#bengali-font-bold" width="5" side="double" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="ফায়ার অ্যালার্ম শুনে কাজ ফেলে সরেছেন -- সঠিক" position="0 -0.1 -4" align="center" color="#A5D6A7" font="#bengali-font" width="6" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-text value="সবুজ EXIT চিহ্ন ও মেঝের চিহ্ন অনুসরণ করেছেন -- সঠিক" position="0 -0.55 -4" align="center" color="#81C784" font="#bengali-font" width="6" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-text value="বাধাগ্রস্ত প্রস্থান দেখে বিকল্প পথ নিয়েছেন -- সঠিক" position="0 -1.0 -4" align="center" color="#81C784" font="#bengali-font" width="6" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-text value="ধোঁয়া দেখে নিচু হয়ে/হামাগুড়ি দিয়ে এগিয়েছেন -- সঠিক" position="0 -1.45 -4" align="center" color="#81C784" font="#bengali-font" width="6" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-text value="আহত সহকর্মীকে সাহায্য করেছেন, লিফট এড়িয়েছেন -- সঠিক" position="0 -1.9 -4" align="center" color="#A5D6A7" font="#bengali-font" width="6" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-text value="নিরাপদ সমাবেশস্থলে পৌঁছে উপস্থিতি জানিয়েছেন -- সঠিক" position="0 -2.35 -4" align="center" color="#81C784" font="#bengali-font" width="6" side="double" scale="0.4 0.4 0.4"></a-text>
+      <a-entity position="0 -3.0 -4" class="clickable" geometry="primitive: plane; width: 3.0; height: 0.6" material="color: #FF6F00; emissive: #FF6F00; emissiveIntensity: 0.15" animation__pulse="property: scale; to: 1.05 1.05 1.05; dur: 1200; dir: alternate; loop: true" nav-btn data-target="scene-intro"><a-text value="পুনরায় শুরু করুন" position="0 0 0.01" align="center" color="#ffffff" font="#bengali-font-bold" width="2.8" side="double" scale="0.5 0.5 0.5"></a-text></a-entity>
+      <a-text value="ILO Bangladesh - NOSHTRI (c) 2026" position="0 -4.0 -4" align="center" color="#546E7A" font="#bengali-font" width="5" side="double" scale="0.35 0.35 0.35"></a-text>
+    </a-entity>
+
+    <a-entity camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+      <a-entity cursor="fuse: true; fuseTimeout: 600" position="0 0 -1" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.012" material="color: #ffffff; shader: flat">
+        <a-animation attribute="scale" begin="fusing" end="fusing-done" from="1 1 1" to="12 12 1" dur="600"></a-animation>
+      </a-entity>
+    </a-entity>
+    <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
+
+  </a-scene>
+
+  <script>
+    (function() {
+      AFRAME.registerComponent('hotspot', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+      AFRAME.registerComponent('hazard', {
+        init: function () {
+          var self = this;
+          var originalColor = this.el.getAttribute('material').color;
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            self.el.setAttribute('material', 'color', '#FF0000');
+            self.el.setAttribute('material', 'emissive', '#FF0000');
+            self.el.setAttribute('material', 'emissiveIntensity', '0.8');
+            setTimeout(function () {
+              self.el.setAttribute('material', 'color', originalColor);
+              self.el.setAttribute('material', 'emissive', originalColor);
+              self.el.setAttribute('material', 'emissiveIntensity', '0.3');
+            }, 400);
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+      AFRAME.registerComponent('nav-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+      AFRAME.registerComponent('scene-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+      function navigateToScene(sceneId) {
+        var scenes = document.querySelectorAll('.scene');
+        for (var i = 0; i < scenes.length; i++) {
+          scenes[i].setAttribute('visible', false);
+        }
+        var target = document.getElementById(sceneId);
+        if (target) {
+          target.setAttribute('visible', true);
+        }
+        var camera = document.querySelector('[camera]');
+        if (camera) {
+          camera.setAttribute('rotation', '0 0 0');
+        }
+        console.log('Navigated to scene:', sceneId);
+      }
+      var tourActive = false;
+      var tourTimer = null;
+      var tourStep = 0;
+      var tourItinerary = [
+        ["scene-1", -45, 6, true],
+        ["scene-1", 30, 5, true],
+        ["scene-1", 135, 5, true],
+        ["scene-2", -30, 6, true],
+        ["scene-2", 60, 5, true],
+        ["scene-2", -120, 5, true],
+        ["scene-3", -60, 6, true],
+        ["scene-3", 30, 5, true],
+        ["scene-3", 120, 5, true],
+        ["scene-4", 180, 6, true],
+        ["scene-4", 90, 5, true],
+        ["scene-4", 270, 5, true],
+        ["scene-complete", 0, 6, false]
+      ];
+      function startAutoTour() {
+        if (tourActive) return;
+        tourActive = true;
+        tourStep = 0;
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#757575');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '\u23F9 \u09A5\u09BE\u09AE\u09BE\u09A8');
+        runTourStep();
+      }
+      function runTourStep() {
+        if (!tourActive) return;
+        if (tourStep >= tourItinerary.length) { stopAutoTour(); return; }
+        var step = tourItinerary[tourStep];
+        var sceneId = step[0], rotY = step[1], delay = step[2] * 1000, clickHotspot = step[3];
+        navigateToScene(sceneId);
+        setTimeout(function() {
+          if (!tourActive) return;
+          var cam = document.querySelector('[camera]');
+          if (cam) cam.setAttribute('rotation', '0 ' + rotY + ' 0');
+        }, 300);
+        if (clickHotspot) {
+          setTimeout(function() {
+            if (!tourActive) return;
+            var scene = document.getElementById(sceneId);
+            if (scene) {
+              var hotspots = scene.querySelectorAll('[hotspot], [hazard]');
+              if (hotspots.length > 0) {
+                var idx = tourStep % hotspots.length;
+                hotspots[idx].dispatchEvent(new MouseEvent('click', {bubbles: true}));
+              }
+            }
+          }, 1500);
+        }
+        tourTimer = setTimeout(function() { tourStep++; runTourStep(); }, delay);
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '\u23F9 \u09A5\u09BE\u09AE\u09BE\u09A8 (' + (tourStep+1) + '/' + tourItinerary.length + ')');
+      }
+      function stopAutoTour() {
+        tourActive = false;
+        if (tourTimer) { clearTimeout(tourTimer); tourTimer = null; }
+        document.getElementById('auto-tour-btn').setAttribute('material', 'color', '#4CAF50');
+        var tourText = document.querySelector('#auto-tour-btn a-text');
+        if (tourText) tourText.setAttribute('value', '\uD83D\uDD04 \u0985\u099F\u09CB \u099F\u09CD\u09AF\u09C1\u09B0');
+      }
+      AFRAME.registerComponent('auto-tour', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            if (!tourActive) startAutoTour(); else stopAutoTour();
+          });
+        }
+      });
+      document.getElementById('auto-tour-btn').setAttribute('auto-tour', '');
+      console.log('Evacuation Drill VR loaded');
+    })();
+  </script>
+</body>
+</html>
