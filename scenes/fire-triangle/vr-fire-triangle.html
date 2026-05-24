@@ -136,11 +136,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
 
   <div class="permission-box">
     <div class="perm-row">
-      <div class="perm-icon">📷</div>
-      <div class="perm-label">ক্যামেরা অ্যাক্সেস</div>
-      <div class="perm-check" id="perm-camera">❌ দেওয়া হয়নি</div>
-    </div>
-    <div class="perm-row">
       <div class="perm-icon">📱</div>
       <div class="perm-label">মোশন সেন্সর</div>
       <div class="perm-check" id="perm-motion">❌ দেওয়া হয়নি</div>
@@ -275,104 +270,71 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
   const celebCtx=celebCanvas.getContext('2d');
   let celebParticles=[],celebActive=false,cornerRects={heat:null,fuel:null,oxygen:null};
 
-  // ── Permission Screen ──
+// ── Permission Screen ──
   const permScreen=document.getElementById('permission-screen');
   const startBtn=document.getElementById('start-btn');
   const errorMsg=document.getElementById('error-msg');
-  const permCamera=document.getElementById('perm-camera');
   const permMotion=document.getElementById('perm-motion');
 
   let permState={camera:false,motion:false};
 
-  async function requestAllPermissions(){
+  // CRITICAL: Must call DeviceOrientationEvent.requestPermission() directly
+  // from the user gesture handler — NO async before it on iOS
+  function startAR(){
     startBtn.disabled=true;
-    startBtn.textContent='⏳ অনুমতি নেওয়া হচ্ছে...';
+    startBtn.textContent='⏳ AR চালু হচ্ছে...';
     errorMsg.textContent='';
-    permState.camera=false;
-    permState.motion=false;
-    permCamera.textContent='⏳ দেওয়া হচ্ছে...';
-    permCamera.className='perm-check';
 
-    try {
-      // 1) Camera
-      const stream=await navigator.mediaDevices.getUserMedia({
-        video:{facingMode:'environment',width:{ideal:640},height:{ideal:480}}
-      });
-      // Stop the test stream — AR.js will open its own
-      stream.getTracks().forEach(t=>t.stop());
-      permState.camera=true;
-      permCamera.textContent='✅ দেওয়া হয়েছে';
-      permCamera.className='perm-check granted';
-    } catch(e){
-      errorMsg.textContent='❌ ক্যামেরা অ্যাক্সেস অনুমতি দেওয়া হয়নি। সেটিংস থেকে অনুমতি দিন।';
-      startBtn.disabled=false;
-      startBtn.textContent='▶  আবার চেষ্টা করুন';
-      throw e;
-    }
-
-    // 2) Device orientation (iOS 13+)
-    try {
-      if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
-        const r=await DeviceOrientationEvent.requestPermission();
-        if(r==='granted'){
-          permState.motion=true;
-          permMotion.textContent='✅ দেওয়া হয়েছে';
-          permMotion.className='perm-check granted';
-        } else {
-          errorMsg.textContent='⚠️ মোশন সেন্সর অনুমতি দেওয়া হয়নি। iOS Settings > Safari > Motion & Orientation Access চালু করুন।';
-        }
-      } else {
-        // Android or older iOS — no explicit permission needed
-        permState.motion=true;
-        permMotion.textContent='✅ প্রয়োজন নেই';
-        permMotion.className='perm-check granted';
-      }
-
-      // 3) Also request DeviceMotion if available
-      if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
-        await DeviceMotionEvent.requestPermission();
-      }
-    } catch(e){
-      // Non-critical — continue anyway on Android
-      permState.motion=true;
-      permMotion.textContent='✅ স্বয়ংক্রিয়';
+    // Step 1: Request motion permissions FIRST (iOS 13+)
+    // This MUST be called synchronously from the user gesture
+    if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
+      // iOS 13+ path
+      DeviceOrientationEvent.requestPermission()
+        .then(function(state){
+          if(state==='granted'){
+            permMotion.textContent='✅ দেওয়া হয়েছে';
+            permMotion.className='perm-check granted';
+            permState.motion=true;
+          } else {
+            permMotion.textContent='⚠️ অস্বীকৃত';
+          }
+          // Also request DeviceMotion
+          if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
+            return DeviceMotionEvent.requestPermission();
+          }
+        })
+        .then(function(){
+          // Now inject the AR scene — permissions are granted
+          finishStart();
+        })
+        .catch(function(){
+          // Non-fatal on older iOS versions
+          finishStart();
+        });
+    } else {
+      // Android or older iOS — no explicit permission needed
+      permMotion.textContent='✅ প্রয়োজন নেই';
       permMotion.className='perm-check granted';
-    }
-
-    // Check minimum: camera is essential
-    if(!permState.camera){
-      throw new Error('Camera permission required');
-    }
-
-    return true;
-  }
-
-  async function onStartAR(){
-    try {
-      await requestAllPermissions();
-      // Hide permission screen
-      permScreen.classList.add('hidden');
-      // Show loading
-      loading.classList.remove('hidden');
-      // Inject AR scene into DOM
-      document.body.insertAdjacentHTML('afterbegin',AR_SCENE_HTML);
-      // A-Frame auto-detects the <a-scene> and initializes
-      // The 'loaded' event on a-scene hides the loading screen
-      setupWhenReady();
-    } catch(e){
-      if(!errorMsg.textContent){
-        errorMsg.textContent='❌ '+(e.message||'অনুমতি নেওয়া সম্ভব হয়নি');
-      }
-      startBtn.disabled=false;
-      startBtn.textContent='▶  আবার চেষ্টা করুন';
+      permState.motion=true;
+      finishStart();
     }
   }
 
-  startBtn.addEventListener('click',onStartAR);
-  // Also handle touchstart for immediate iOS response
+  function finishStart(){
+    // Hide permission screen
+    permScreen.classList.add('hidden');
+    // Show loading
+    loading.classList.remove('hidden');
+    // Inject AR scene into DOM
+    document.body.insertAdjacentHTML('afterbegin',AR_SCENE_HTML);
+    // A-Frame auto-detects the <a-scene> and initializes
+    setupWhenReady();
+  }
+
+  startBtn.addEventListener('click',startAR);
   startBtn.addEventListener('touchstart',function(e){
-    // Just prevent default — the click handler does the work
-    // This ensures iOS registers the user gesture
+    // Touchstart triggers the permission flow faster on iOS
+    startAR();
   },{passive:true});
 
   // ── Existing Logic ──
