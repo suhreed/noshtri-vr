@@ -56,8 +56,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
 #gen-link{color:#66aaff;text-decoration:underline;font-size:12px;cursor:pointer}
 #hp-close{margin-top:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.12);color:#fff;font-size:14px;padding:10px 32px;border-radius:24px;cursor:pointer}
 #hp-close:active{background:rgba(255,255,255,0.18)}
-#loading{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;background:#0a0a1a;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:14px;text-align:center;transition:opacity 0.8s}
-#loading.hidden{opacity:0;pointer-events:none}
+#loading{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;background:#0a0a1a;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:14px;text-align:center;transition:opacity 0.8s;pointer-events:none}
+#loading.hidden{opacity:0}
 #loading .spinner{width:38px;height:38px;border:3px solid rgba(255,255,255,0.08);border-top-color:#ff4444;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:14px}
 #loading .sub{color:rgba(255,255,255,0.35);font-size:12px;margin-top:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -68,59 +68,94 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
   #modal-card{padding:20px 14px}
   #modal-title{font-size:17px}
 }
+/* ── Permission/Start Screen ── */
+#permission-screen{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:10000;
+  background:linear-gradient(145deg,#0a0a1a,#1a1a30);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:30px;
+  color:#fff;
+  animation:fadeIn 0.5s ease;
+}
+#permission-screen.hidden{
+  opacity:0;pointer-events:none;transition:opacity 0.6s;
+}
+#permission-screen .icon{font-size:72px;margin-bottom:12px}
+#permission-screen h1{font-size:22px;font-weight:700;margin-bottom:4px;line-height:1.4}
+#permission-screen .sub{caption{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;line-height:1.6}
+#permission-screen .permission-box{
+  width:100%;max-width:340px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;padding:20px 16px;margin-bottom:28px;
+  text-align:left;
+}
+#permission-screen .perm-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;
+  font-size:14px;
+}
+#permission-screen .perm-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,0.05)}
+#permission-screen .perm-icon{font-size:20px;width:32px;text-align:center}
+#permission-screen .perm-label{flex:1;font-weight:500}
+#permission-screen .perm-check{font-size:14px;color:rgba(255,255,255,0.3)}
+#permission-screen .perm-check.granted{color:#4CAF50}
+#permission-screen #start-btn{
+  width:100%;max-width:340px;
+  background:linear-gradient(135deg,#ff4444,#ff6600);
+  border:none;border-radius:16px;
+  padding:16px 20px;
+  font-size:18px;font-weight:700;
+  color:#fff;
+  cursor:pointer;
+  transition:transform 0.15s,box-shadow 0.15s;
+  font-family:inherit;
+  letter-spacing:0.5px;
+}
+#permission-screen #start-btn:active{transform:scale(0.97)}
+#permission-screen #start-btn:disabled{
+  opacity:0.4;transform:none;pointer-events:none;
+}
+#permission-screen .error-msg{
+  font-size:13px;color:#ff6666;
+  margin-top:12px;min-height:20px;
+}
+#permission-screen .bottom-hint{
+  font-size:12px;color:rgba(255,255,255,0.3);
+  margin-top:12px;line-height:1.5;
+}
 </style>
 </head>
 <body>
 
+<!-- ═══ PERMISSION / START SCREEN ═══ -->
+<div id="permission-screen">
+  <div class="icon">🔥</div>
+  <h1>অগ্নি ত্রিভুজ অন্বেষক</h1>
+  <div class="sub">তিনটি মার্কার দিয়ে অগ্নি ত্রিভুজ শিখুন</div>
+
+  <div class="permission-box">
+    <div class="perm-row">
+      <div class="perm-icon">📷</div>
+      <div class="perm-label">ক্যামেরা অ্যাক্সেস</div>
+      <div class="perm-check" id="perm-camera">❌ দেওয়া হয়নি</div>
+    </div>
+    <div class="perm-row">
+      <div class="perm-icon">📱</div>
+      <div class="perm-label">মোশন সেন্সর</div>
+      <div class="perm-check" id="perm-motion">❌ দেওয়া হয়নি</div>
+    </div>
+  </div>
+
+  <button id="start-btn">▶  AR শুরু করুন</button>
+  <div class="error-msg" id="error-msg"></div>
+  <div class="bottom-hint">প্রয়োজনীয় অনুমতি দিতে "AR শুরু করুন" বাটনে ট্যাপ করুন</div>
+</div>
+
+<!-- ═══ LOADING ═══ -->
 <div id="loading"><div class="spinner"></div><div>অগ্নি ত্রিভুজ অন্বেষক</div><div class="sub">ক্যামেরা চালু হচ্ছে...</div></div>
 
-<a-scene id="ar-scene" embedded
-  arjs="sourceType:webcam;debugUIEnabled:false;detectionMode:mono_and_matrix;matrixCodeType:3x3;patternRatio:0.5;maxDetectionRate:60;"
-  renderer="antialias:true;alpha:true;">
-
-  <!-- MARKER 0 (Hiro) → Heat (তাপ) — red corner -->
-  <a-marker preset="hiro" id="marker-heat">
-    <a-entity position="0 0.07 0">
-      <a-plane color="#ff3333" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
-      <a-ring color="#ff4444" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
-        <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
-        <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
-      </a-ring>
-      <a-text value="তাপ" color="#ff5555" align="center" position="0 0.055 0.002" scale="0.06 0.06 1"></a-text>
-      <a-text value="MARKER 0" color="#ff5555" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
-    </a-entity>
-  </a-marker>
-
-  <!-- MARKER 1 (Kanji) → Fuel (জ্বালানি) — orange corner -->
-  <a-marker preset="kanji" id="marker-fuel">
-    <a-entity position="0 0.07 0">
-      <a-plane color="#ff8800" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
-      <a-ring color="#ff8800" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
-        <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
-        <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
-      </a-ring>
-      <a-text value="জ্বালানি" color="#ffaa44" align="center" position="0 0.055 0.002" scale="0.05 0.05 1"></a-text>
-      <a-text value="MARKER 1" color="#ffaa44" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
-    </a-entity>
-  </a-marker>
-
-  <!-- MARKER 2 (Barcode 0) → Oxygen (অক্সিজেন) — blue corner -->
-  <a-marker type="barcode" value="0" id="marker-oxygen">
-    <a-entity position="0 0.07 0">
-      <a-plane color="#3388ff" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
-      <a-ring color="#4488ff" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
-        <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
-        <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
-      </a-ring>
-      <a-text value="অক্সিজেন" color="#6699ff" align="center" position="0 0.055 0.002" scale="0.05 0.05 1"></a-text>
-      <a-text value="BARCODE 0" color="#6699ff" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
-    </a-entity>
-  </a-marker>
-
-  <a-entity camera></a-entity>
-  <a-entity light="type:ambient;color:white;intensity:0.6"></a-entity>
-</a-scene>
-
+<!-- ═══ OVERLAY CANVAS ═══ -->
 <canvas id="overlay"></canvas>
 
 <div id="status-bar">
@@ -165,6 +200,58 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
 <script>
 (function(){
   'use strict';
+
+  // ── AR Scene HTML (injected after permission granted) ──
+  const AR_SCENE_HTML = `
+    <a-scene id="ar-scene" embedded
+      arjs="sourceType:webcam;debugUIEnabled:false;detectionMode:mono_and_matrix;matrixCodeType:3x3;patternRatio:0.5;maxDetectionRate:60;"
+      renderer="antialias:true;alpha:true;">
+
+      <!-- MARKER 0 (Hiro) → Heat (তাপ) -->
+      <a-marker preset="hiro" id="marker-heat">
+        <a-entity position="0 0.07 0">
+          <a-plane color="#ff3333" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
+          <a-ring color="#ff4444" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
+            <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
+            <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
+          </a-ring>
+          <a-text value="তাপ" color="#ff5555" align="center" position="0 0.055 0.002" scale="0.06 0.06 1"></a-text>
+          <a-text value="MARKER 0" color="#ff5555" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
+        </a-entity>
+      </a-marker>
+
+      <!-- MARKER 1 (Kanji) → Fuel (জ্বালানি) -->
+      <a-marker preset="kanji" id="marker-fuel">
+        <a-entity position="0 0.07 0">
+          <a-plane color="#ff8800" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
+          <a-ring color="#ff8800" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
+            <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
+            <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
+          </a-ring>
+          <a-text value="জ্বালানি" color="#ffaa44" align="center" position="0 0.055 0.002" scale="0.05 0.05 1"></a-text>
+          <a-text value="MARKER 1" color="#ffaa44" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
+        </a-entity>
+      </a-marker>
+
+      <!-- MARKER 2 (Barcode 0) → Oxygen (অক্সিজেন) -->
+      <a-marker type="barcode" value="0" id="marker-oxygen">
+        <a-entity position="0 0.07 0">
+          <a-plane color="#3388ff" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
+          <a-ring color="#4488ff" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
+            <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
+            <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
+          </a-ring>
+          <a-text value="অক্সিজেন" color="#6699ff" align="center" position="0 0.055 0.002" scale="0.05 0.05 1"></a-text>
+          <a-text value="BARCODE 0" color="#6699ff" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
+        </a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+      <a-entity light="type:ambient;color:white;intensity:0.6"></a-entity>
+    </a-scene>
+  `;
+
+  // ── State ──
   const state={triangle:{heat:0,fuel:0,oxygen:0}};
   const markerFound={0:false,1:false,2:false};
   let allFoundOnce=false;
@@ -187,6 +274,108 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
   const celebCanvas=document.getElementById('celebration');
   const celebCtx=celebCanvas.getContext('2d');
   let celebParticles=[],celebActive=false,cornerRects={heat:null,fuel:null,oxygen:null};
+
+  // ── Permission Screen ──
+  const permScreen=document.getElementById('permission-screen');
+  const startBtn=document.getElementById('start-btn');
+  const errorMsg=document.getElementById('error-msg');
+  const permCamera=document.getElementById('perm-camera');
+  const permMotion=document.getElementById('perm-motion');
+
+  let permState={camera:false,motion:false};
+
+  async function requestAllPermissions(){
+    startBtn.disabled=true;
+    startBtn.textContent='⏳ অনুমতি নেওয়া হচ্ছে...';
+    errorMsg.textContent='';
+    permState.camera=false;
+    permState.motion=false;
+    permCamera.textContent='⏳ দেওয়া হচ্ছে...';
+    permCamera.className='perm-check';
+
+    try {
+      // 1) Camera
+      const stream=await navigator.mediaDevices.getUserMedia({
+        video:{facingMode:'environment',width:{ideal:640},height:{ideal:480}}
+      });
+      // Stop the test stream — AR.js will open its own
+      stream.getTracks().forEach(t=>t.stop());
+      permState.camera=true;
+      permCamera.textContent='✅ দেওয়া হয়েছে';
+      permCamera.className='perm-check granted';
+    } catch(e){
+      errorMsg.textContent='❌ ক্যামেরা অ্যাক্সেস অনুমতি দেওয়া হয়নি। সেটিংস থেকে অনুমতি দিন।';
+      startBtn.disabled=false;
+      startBtn.textContent='▶  আবার চেষ্টা করুন';
+      throw e;
+    }
+
+    // 2) Device orientation (iOS 13+)
+    try {
+      if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
+        const r=await DeviceOrientationEvent.requestPermission();
+        if(r==='granted'){
+          permState.motion=true;
+          permMotion.textContent='✅ দেওয়া হয়েছে';
+          permMotion.className='perm-check granted';
+        } else {
+          errorMsg.textContent='⚠️ মোশন সেন্সর অনুমতি দেওয়া হয়নি। iOS Settings > Safari > Motion & Orientation Access চালু করুন।';
+        }
+      } else {
+        // Android or older iOS — no explicit permission needed
+        permState.motion=true;
+        permMotion.textContent='✅ প্রয়োজন নেই';
+        permMotion.className='perm-check granted';
+      }
+
+      // 3) Also request DeviceMotion if available
+      if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
+        await DeviceMotionEvent.requestPermission();
+      }
+    } catch(e){
+      // Non-critical — continue anyway on Android
+      permState.motion=true;
+      permMotion.textContent='✅ স্বয়ংক্রিয়';
+      permMotion.className='perm-check granted';
+    }
+
+    // Check minimum: camera is essential
+    if(!permState.camera){
+      throw new Error('Camera permission required');
+    }
+
+    return true;
+  }
+
+  async function onStartAR(){
+    try {
+      await requestAllPermissions();
+      // Hide permission screen
+      permScreen.classList.add('hidden');
+      // Show loading
+      loading.classList.remove('hidden');
+      // Inject AR scene into DOM
+      document.body.insertAdjacentHTML('afterbegin',AR_SCENE_HTML);
+      // A-Frame auto-detects the <a-scene> and initializes
+      // The 'loaded' event on a-scene hides the loading screen
+      setupWhenReady();
+    } catch(e){
+      if(!errorMsg.textContent){
+        errorMsg.textContent='❌ '+(e.message||'অনুমতি নেওয়া সম্ভব হয়নি');
+      }
+      startBtn.disabled=false;
+      startBtn.textContent='▶  আবার চেষ্টা করুন';
+    }
+  }
+
+  startBtn.addEventListener('click',onStartAR);
+  // Also handle touchstart for immediate iOS response
+  startBtn.addEventListener('touchstart',function(e){
+    // Just prevent default — the click handler does the work
+    // This ensures iOS registers the user gesture
+  },{passive:true});
+
+  // ── Existing Logic ──
 
   function getTriangleGeom(W,H){
     const cx=W/2,baseY=H-50,sideLen=Math.min(W*0.34,190);
@@ -389,7 +578,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
     const d={
       heat:{icon:'🔥',title:'তাপ — শীতলীকরণ',label:'প্রথম কোণ · Heat',desc:'তাপ দহনের মূল চালিকাশক্তি। তাপ অপসারণ করলেই আগুন নিভে যায়।',action:'🔥 শীতলীকরণ: জল ছিটানো, ফোম বা শুষ্ক রাসায়নিক নির্বাপক ব্যবহার করা হয়। তাপমাত্রা দহনাংকের নিচে নামিয়ে আনাই মূল লক্ষ্য।',cls:'cooling'},
       fuel:{icon:'🪵',title:'জ্বালানি — অগ্নি প্রতিবন্ধক',label:'দ্বিতীয় কোণ · Fuel',desc:'জ্বালানি ছাড়া আগুন জ্বলতে পারে না। জ্বালানি অপসারণ আগুন ছড়িয়ে পড়া রোধ করে।',action:'🛑 অগ্নি প্রতিবন্ধক: দাহ্য পদার্থ সরিয়ে ফেলা, আগুনের পথে ফায়ারব্রেক তৈরি করা, বা জ্বালানি উৎস কেটে দেওয়া। বন ও কলকারখানায় এটি অত্যন্ত কার্যকর কৌশল।',cls:'firebreak'},
-      oxygen:{icon:'💨',title:'অক্সিজেন — শ্বাসরোধ',label:'তৃতীয় কোণ · Oxygen',desc:'অক্সিজেন দহন প্রক্রিয়াকে টিকিয়ে রাখে। অক্সিজেন সরিয়ে দিলে আগুন নিভে যায়।',action:'🧯 শ্বাসরোধ: ফোম, কার্বন ডাই-অক্সাইড (CO₂) নির্বাপক, বা কম্বল/কম্বল দিয়ে আগুন ঢেকে বাতাসের অক্সিজেন প্রবাহ বন্ধ করা। ছোট আগুনের জন্য অত্যন্ত কার্যকরী।',cls:'smothering'}
+      oxygen:{icon:'💨',title:'অক্সিজেন — শ্বাসরোধ',label:'তৃতীয় কোণ · Oxygen',desc:'অক্সিজেন দহন প্রক্রিয়াকে টিকিয়ে রাখে। অক্সিজেন সরিয়ে দিলে আগুন নিভে যায়।',action:'🧯 শ্বাসরোধ: ফোম, কার্বন ডাই-অক্সাইড (CO₂) নির্বাপক, বা কম্বল দিয়ে আগুন ঢেকে বাতাসের অক্সিজেন প্রবাহ বন্ধ করা। ছোট আগুনের জন্য অত্যন্ত কার্যকরী।',cls:'smothering'}
     };
     const x=d[type];if(!x)return;
     modalIcon.textContent=x.icon;
@@ -442,15 +631,23 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali'
   hpClose.addEventListener('click',()=>helpPanel.classList.remove('show'));
   helpPanel.addEventListener('click',(e)=>{if(e.target===helpPanel)helpPanel.classList.remove('show');});
 
-  const arScene=document.querySelector('a-scene');
-  if(arScene)arScene.addEventListener('loaded',()=>setTimeout(()=>loading.classList.add('hidden'),500));
-  setTimeout(()=>loading.classList.add('hidden'),8000);
+  // ── Called after AR scene is injected ──
+  function setupWhenReady(){
+    const arScene=document.querySelector('a-scene');
+    if(arScene){
+      arScene.addEventListener('loaded',()=>setTimeout(()=>loading.classList.add('hidden'),500));
+    }
+    // Safety timeout
+    setTimeout(()=>loading.classList.add('hidden'),12000);
+    setupMarkerEvents();
+    setTimeout(()=>guide.classList.add('show'),3000);
+  }
 
   resize();
   window.addEventListener('resize',resize);
   window.addEventListener('orientationchange',()=>setTimeout(resize,300));
-  setupMarkerEvents();
-  setTimeout(()=>guide.classList.add('show'),2000);
+
+  // Start the animation loop immediately (it runs on canvas overlay, not AR)
   update();
 })();
 </script>
