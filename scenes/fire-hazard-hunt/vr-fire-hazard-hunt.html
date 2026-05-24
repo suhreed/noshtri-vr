@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অগ্নি ঝুঁকি শনাক্তকরণ — Fire Hazard Hunt VR</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.6.0/aframe.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+  </style>
+</head>
+<body>
+  <a-scene>
+    <!-- ═══ ASSETS ═══ -->
+    <a-assets>
+      <img id="sky-intro" src="assets/intro-bg.jpg" crossorigin="anonymous">
+      <img id="sky-factory" src="assets/factory-floor.jpg" crossorigin="anonymous">
+      <img id="sky-chemical" src="assets/chemical-storage.jpg" crossorigin="anonymous">
+      <img id="sky-office" src="assets/office-admin.jpg" crossorigin="anonymous">
+      <a-asset-item id="bn-font" src="https://cdn.jsdelivr.net/gh/AwesomePixels/noto-sans-bengali@main/NotoSansBengali-Regular.woff2"></a-asset-item>
+    </a-assets>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- SCENE 0: INTRO                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <a-entity id="scene-intro" class="scene">
+      <a-sky src="#sky-intro" rotation="0 -90 0"></a-sky>
+      <a-plane position="0 0 -3" rotation="0 0 0" width="8" height="5"
+               color="#000000" opacity="0.55" side="double"></a-plane>
+      <a-text value="🔥 অগ্নি ঝুঁকি শনাক্তকরণ"
+              position="0 2.8 -3.2" align="center" color="#FF6F00" width="7" side="double"></a-text>
+      <a-text value="Fire Hazard Hunt — NOSHTRI VR"
+              position="0 2.2 -3.2" align="center" color="#FFB74D" width="6" side="double" font="#bn-font"></a-text>
+      <a-text value="কারখানার তিনটি ভিন্ন এলাকায় আগুনের ঝুঁকি চিহ্নিত করুন"
+              position="0 1.4 -3.2" align="center" color="#ffffff" width="6" side="double" font="#bn-font"></a-text>
+      <a-text value="শিখন ফলাফল:"
+              position="-2.0 0.6 -3.2" align="left" color="#FFEB3B" width="4" side="double" font="#bn-font" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="• বৈদ্যুতিক ঝুঁকি চিহ্নিত করতে পারবেন
+• রাসায়নিক ঝুঁকি শনাক্ত করতে পারবেন
+• অগ্নি নিরাপত্তা ব্যবস্থা মূল্যায়ন করতে পারবেন"
+              position="-2.0 0.0 -3.2" align="left" color="#ffffff" width="5" side="double" font="#bn-font" scale="0.55 0.55 0.55"></a-text>
+      <a-text value="মোট ৩টি দৃশ্য · ১৫টি হটস্পট"
+              position="0 -1.0 -3.2" align="center" color="#90A4AE" width="4" side="double" font="#bn-font" scale="0.5 0.5 0.5"></a-text>
+      <a-entity position="-1.4 -3.0 -3.8"
+                geometry="primitive: plane; width: 1.8; height: 0.45"
+                material="color: #FF6F00"
+                scene-btn data-target="scene-1">
+        <a-text value="শুরু করুন ▶" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.6" font="#bn-font"></a-text>
+      </a-entity>
+      <a-entity id="auto-tour-btn" position="1.4 -3.0 -3.8"
+                geometry="primitive: plane; width: 1.8; height: 0.45"
+                material="color: #4CAF50">
+        <a-text value="🔄 অটো ট্যুর" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.6" font="#bn-font"></a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- SCENE 1: Factory Floor                          -->
+    <!-- ════════════════════════════════════════════════ -->
+    <a-entity id="scene-1" class="scene" visible="false">
+      <a-sky src="#sky-factory" rotation="0 -90 0"></a-sky>
+      <a-text value="অগ্নি ঝুঁকি শনাক্তকরণ — দৃশ্য ১: উৎপাদন এলাকা"
+              position="0 1.8 -2.5" align="center" color="#ffffff" width="7" side="double" font="#bn-font"></a-text>
+      <a-text value="চারপাশে তাকান এবং লাল/নীল বিন্দুতে gaze করুন (০.৬ সেকেন্ড)"
+              position="0 1.3 -2.5" align="center" color="#FFEB3B" width="6" side="double" font="#bn-font"></a-text>
+
+      <!-- HAZARD 1: Overloaded electrical socket -->
+      <a-entity position="-2.5 1.2 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অতিরিক্ত বৈদ্যুতিক লোড" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: অতিরিক্ত বৈদ্যুতিক লোড
+একসাথে অনেক প্লাগ ব্যবহার করায় শর্ট সার্কিট হয়ে আগুন লাগতে পারে।
+দ্রুত সমাধান: পর্যাপ্ত সংখ্যক সকেট স্থাপন করুন এবং ইলেকট্রিশিয়ানের পরামর্শ নিন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 2: Exposed wiring -->
+      <a-entity position="1.5 0.8 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="খোলা বৈদ্যুতিক তার" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="⚠️ বিপদ: খোলা বৈদ্যুতিক তার
+ক্ষতিগ্রস্ত তার শর্ট সার্কিট, আগুন ও বিদ্যুৎস্পৃষ্ট হওয়ার কারণ।
+দ্রুত সমাধান: পেশাদার ইলেকট্রিশিয়ান দিয়ে মেরামত করান।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 3: Blocked exit -->
+      <a-entity position="3 1.0 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="প্রস্থান পথ বন্ধ" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: প্রস্থান পথ বন্ধ
+করিডোরে মালপত্র রাখায় জরুরি মুহূর্তে বের হওয়া অসম্ভব।
+দ্রুত সমাধান: প্রস্থান পথ সবসময় খালি রাখুন।
+আইনি বিধান: বাংলাদেশ কারখানা আইন ১৯৬৫
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 4: Flammable materials near heat -->
+      <a-entity position="-1 0.3 -3.5" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="তাপের কাছে দাহ্য পদার্থ" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="⚠️ বিপদ: তাপের কাছে দাহ্য পদার্থ
+কার্টন/কাগজ/কাপড় মেশিনের কাছে রাখা— দ্রুত আগুন ধরতে পারে।
+দ্রুত সমাধান: দাহ্য পদার্থ তাপ উৎস থেকে ২ মিটার দূরে রাখুন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 5: Missing fire extinguisher -->
+      <a-entity position="2 -0.2 -3.5" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অগ্নি নির্বাপক নেই" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: অগ্নি নির্বাপক নেই
+নির্ধারিত স্থানে অগ্নি নির্বাপক যন্ত্র নেই। জরুরি অবস্থায় আগুন নেভানোর উপায় নেই।
+দ্রুত সমাধান: প্রতি ২০০ বর্গমিটারে অগ্নি নির্বাপক স্থাপন ও মাসিক পরীক্ষা।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৬১
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Navigation -->
+      <a-entity position="3.0 -2.5 -1.5"
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #4CAF50"
+                nav-btn data-target="scene-2">
+        <a-text value="পরবর্তী দৃশ্য ▶" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font"></a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- SCENE 2: Chemical Storage Area                   -->
+    <!-- ════════════════════════════════════════════════ -->
+    <a-entity id="scene-2" class="scene" visible="false">
+      <a-sky src="#sky-chemical" rotation="0 -90 0"></a-sky>
+      <a-text value="অগ্নি ঝুঁকি শনাক্তকরণ — দৃশ্য ২: রাসায়নিক সংরক্ষণাগার"
+              position="0 1.8 -2.5" align="center" color="#ffffff" width="7" side="double" font="#bn-font"></a-text>
+      <a-text value="রাসায়নিক আগুন ও বিস্ফোরণের ঝুঁকি চিহ্নিত করুন"
+              position="0 1.3 -2.5" align="center" color="#FFEB3B" width="6" side="double" font="#bn-font"></a-text>
+
+      <!-- HAZARD 1: Improper labels -->
+      <a-entity position="-2.5 1.0 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="লেবেলবিহীন রাসায়নিক" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: লেবেলবিহীন রাসায়নিক
+কী রাসায়নিক তা বোঝার উপায় নেই— ভুলভাবে ব্যবহার করলে আগুন বা বিস্ফোরণ হতে পারে।
+দ্রুত সমাধান: প্রতিটি ড্রামে সঠিক নাম ও GHS বিপদ চিহ্নযুক্ত লেবেল লাগান।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৩৪(ক)
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 2: Chemical spill -->
+      <a-entity position="0.5 0.2 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="রাসায়নিক ছিটকে পড়া" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: রাসায়নিক ছিটকে পড়া
+ড্রাম থেকে রাসায়নিক মাটিতে পড়ে আছে। আগুন বা রাসায়নিক পোড়ার ঝুঁকি।
+দ্রুত সমাধান: স্পিল কিট দিয়ে তাৎক্ষণিক পরিষ্কার করুন। বান্ডেড এলাকা ও ড্রিপ ট্রে ব্যবহার করুন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 3: Poor ventilation -->
+      <a-entity position="-1 1.5 -3.5" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অপর্যাপ্ত বায়ু চলাচল" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="⚠️ বিপদ: অপর্যাপ্ত বায়ু চলাচল
+রাসায়নিক বাষ্প জমে বিস্ফোরণ ও স্বাস্থ্য ঝুঁকি তৈরি করতে পারে।
+দ্রুত সমাধান: যান্ত্রিক বায়ু চলাচল ও এক্সস্ট ফ্যান স্থাপন করুন।
+ঝুঁকি স্তর: মাঝারি"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 4: Incompatible chemicals stored together -->
+      <a-entity position="3 1.2 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অসামঞ্জস্য রাসায়নিক" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: অসামঞ্জস্য রাসায়নিক একসাথে
+জ্বলনশীল ও অক্সিডাইজার রাসায়নিক পাশাপাশি রাখা— সংস্পর্শে আগুন ধরতে পারে।
+দ্রুত সমাধান: রাসায়নিক সামঞ্জস্য চার্ট অনুসারে আলাদাভাবে সংরক্ষণ করুন। SDS অনুসরণ করুন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 5: No extinguisher near chemicals -->
+      <a-entity position="2 0.5 -3.5" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="রাসায়নিক এলাকায় অগ্নি নির্বাপক নেই" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="3.0" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="⚠️ বিপদ: রাসায়নিক এলাকায় অগ্নি নির্বাপক নেই
+রাসায়নিক আগুন দ্রুত ছড়ায়। নির্বাপক না থাকলে আগুন নিয়ন্ত্রণ অসম্ভব।
+দ্রুত সমাধান: রাসায়নিক এলাকায় ক্লাস B অগ্নি নির্বাপক স্থাপন করুন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Navigation -->
+      <a-entity position="-3.0 -2.5 -1.5"
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #2196F3"
+                nav-btn data-target="scene-1">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.5 -1.5"
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #4CAF50"
+                nav-btn data-target="scene-3">
+        <a-text value="পরবর্তী দৃশ্য ▶" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font"></a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- SCENE 3: Office / Admin Area                     -->
+    <!-- ════════════════════════════════════════════════ -->
+    <a-entity id="scene-3" class="scene" visible="false">
+      <a-sky src="#sky-office" rotation="0 -90 0"></a-sky>
+      <a-text value="অগ্নি ঝুঁকি শনাক্তকরণ — দৃশ্য ৩: অফিস/প্রশাসন এলাকা"
+              position="0 1.8 -2.5" align="center" color="#ffffff" width="7" side="double" font="#bn-font"></a-text>
+      <a-text value="অফিসে আগুনের ঝুঁকি প্রায়ই উপেক্ষিত হয়"
+              position="0 1.3 -2.5" align="center" color="#FFEB3B" width="6" side="double" font="#bn-font"></a-text>
+
+      <!-- HAZARD 1: Trash near heat source -->
+      <a-entity position="-2 0.8 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="তাপের কাছে আবর্জনা" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: তাপের কাছে আবর্জনা
+হিটার/ইলেকট্রিক যন্ত্রের কাছে কাগজ, কার্টন জমে আছে— সহজেই আগুন ধরতে পারে।
+দ্রুত সমাধান: তাপ উৎস থেকে দাহ্য বর্জ্য সরান। নিয়মিত বর্জ্য অপসারণ নিশ্চিত করুন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 2: Blocked fire extinguisher -->
+      <a-entity position="1.5 1.0 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অগ্নি নির্বাপক আবৃত" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: অগ্নি নির্বাপক আবৃত
+নির্বাপকের সামনে মালপত্র রাখায় জরুরি সময়ে ব্যবহার অসম্ভব।
+দ্রুত সমাধান: নির্বাপকের চারপাশে সর্বনিম্ন ১ মিটার ফাঁকা রাখুন। মাসিক পরিদর্শন বাধ্যতামূলক।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 3: Fire door wedged open -->
+      <a-entity position="-2.5 1.7 -3.5" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #F44336; emissive: #F44336; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="ফায়ার ডোর খোলা রাখা" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="🚨 বিপদ: ফায়ার ডোর খোলা রাখা
+চেয়ার দিয়ে ফায়ার ডোর আটকে রাখা— আগুন ও ধোঁয়া দ্রুত ছড়াবে।
+দ্রুত সমাধান: ফায়ার ডোর কখনো খোলা রাখবেন না। স্বয়ংক্রিয় বন্ধের ব্যবস্থা নিশ্চিত করুন।
+আইনি বিধান: বিএলএ ২০০৬, ধারা ৬২
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 4: Overloaded power strip -->
+      <a-entity position="1 0.3 -3.5" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="অতিরিক্ত পাওয়ার স্ট্রিপ" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="⚠️ বিপদ: অতিরিক্ত পাওয়ার স্ট্রিপ
+একসাথে অনেক ইলেকট্রনিক যন্ত্র প্লাগ করা— ওভারলোড হয়ে শর্ট সার্কিটের ঝুঁকি।
+দ্রুত সমাধান: পৃথক সকেট ব্যবহার করুন। পর্যাপ্ত লোড ক্যাপাসিটি নিশ্চিত করুন।
+ঝুঁকি স্তর: মাঝারি"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- HAZARD 5: Blocked emergency exit -->
+      <a-entity position="3.5 1.5 -4" hazard
+                geometry="primitive: sphere; radius: 0.18"
+                material="color: #FF9800; emissive: #FF9800; emissiveIntensity: 0.3"
+                animation__pulse="property: scale; to: 1.3 1.3 1.3; dur: 800; dir: alternate; loop: true">
+        <a-text value="জরুরি প্রস্থান বন্ধ" position="0 0.45 0" align="center"
+                color="#FFEB3B" width="2.8" side="double" font="#bn-font"></a-text>
+        <a-entity class="info-panel" visible="false" position="0 -0.7 0">
+          <a-plane color="#1a1a2e" opacity="0.92" width="3.2" height="2.5">
+            <a-text value="⚠️ বিপদ: জরুরি প্রস্থান বন্ধ
+জরুরি প্রস্থানের পথে আসবাবপত্র ও বক্স রাখা— দ্রুত বের হওয়া অসম্ভব।
+দ্রুত সমাধান: সবসময় জরুরি প্রস্থানের পথ খালি রাখুন। EXIT চিহ্ন স্পষ্টভাবে দৃশ্যমান রাখুন।
+ঝুঁকি স্তর: উচ্চ"
+                    position="-1.4 0.6 0.01" align="left" color="#ffffff" width="2.8" side="double" font="#bn-font"></a-text>
+          </a-plane>
+        </a-entity>
+      </a-entity>
+
+      <!-- Navigation -->
+      <a-entity position="-3.0 -2.5 -1.5"
+                geometry="primitive: plane; width: 1.5; height: 0.4"
+                material="color: #2196F3"
+                nav-btn data-target="scene-2">
+        <a-text value="◀ পূর্ববর্তী" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.4" font="#bn-font"></a-text>
+      </a-entity>
+      <a-entity position="3.0 -2.5 -1.5"
+                geometry="primitive: plane; width: 1.8; height: 0.4"
+                material="color: #9C27B0"
+                nav-btn data-target="scene-complete">
+        <a-text value="শেষ ▶" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.6" font="#bn-font"></a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- SCENE COMPLETE                                   -->
+    <!-- ════════════════════════════════════════════════ -->
+    <a-entity id="scene-complete" class="scene" visible="false">
+      <a-sky src="#sky-intro" rotation="0 -90 0"></a-sky>
+      <a-plane position="0 0 -3" rotation="0 0 0" width="8" height="5"
+               color="#000000" opacity="0.55" side="double"></a-plane>
+      <a-text value="🎉 অভিনন্দন!"
+              position="0 2.5 -4" align="center" color="#4CAF50" width="5" side="double"></a-text>
+      <a-text value="আপনি অগ্নি ঝুঁকি শনাক্তকরণ প্রশিক্ষণ সম্পন্ন করেছেন"
+              position="0 1.8 -4" align="center" color="#ffffff" width="6" side="double" font="#bn-font"></a-text>
+      <a-text value="আপনার শেখা বিষয়সমূহ:"
+              position="-2.2 0.8 -4" align="left" color="#FFEB3B" width="4" side="double"
+              font="#bn-font" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="✅ অতিরিক্ত বৈদ্যুতিক লোড শনাক্তকরণ
+✅ খোলা বৈদ্যুতিক তারের ঝুঁকি বোঝা
+✅ রাসায়নিক লেবেল ও সংরক্ষণ নিয়ম
+✅ অগ্নি নির্বাপকের সঠিক অবস্থান
+✅ ফায়ার ডোরের গুরুত্ব
+✅ জরুরি প্রস্থান পথ পরিষ্কার রাখা"
+              position="-2.2 0.0 -4" align="left" color="#ffffff" width="5" side="double"
+              font="#bn-font" scale="0.5 0.5 0.5"></a-text>
+      <a-text value="মনে রাখবেন: অগ্নি প্রতিরোধই সর্বোত্তম সুরক্ষা"
+              position="0 -1.5 -4" align="center" color="#FF6F00" width="5" side="double" font="#bn-font"></a-text>
+      <a-entity position="0 -2.5 -4"
+                geometry="primitive: plane; width: 2.0; height: 0.45"
+                material="color: #4CAF50"
+                restart-btn>
+        <a-text value="পুনরায় শুরু করুন ↺" position="0 0 0.01" align="center"
+                color="#ffffff" width="1.8" font="#bn-font"></a-text>
+      </a-entity>
+      <a-text value="© 2026 NOSHTRI — ILO Bangladesh"
+              position="0 -3.8 -4" align="center" color="#606060" width="4" side="double"
+              font="#bn-font" scale="0.35 0.35 0.35"></a-text>
+    </a-entity>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- CAMERA + CURSOR + LIGHT                         -->
+    <!-- ════════════════════════════════════════════════ -->
+    <a-entity camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+      <a-entity cursor="fuse: true; fuseTimeout: 600"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01"
+                material="color: #ffffff; shader: flat"></a-entity>
+    </a-entity>
+    <a-light type="ambient" color="#ffffff" intensity="0.5"></a-light>
+  </a-scene>
+
+  <script>
+    (function() {
+      // ── Scene IDs ──
+      var ALL_SCENES = ['scene-intro', 'scene-1', 'scene-2', 'scene-3', 'scene-complete'];
+
+      // ── Component: hotspot (toggle panel, hide siblings) ──
+      AFRAME.registerComponent('hotspot', {
+        init: function () {
+          var self = this;
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+
+      // ── Component: hazard (flash red + toggle panel) ──
+      AFRAME.registerComponent('hazard', {
+        init: function () {
+          var self = this;
+          var mat = self.el.getAttribute('material');
+          var originalColor = mat && mat.color ? mat.color : '#FF9800';
+          this.el.addEventListener('click', function () {
+            var scene = self.el.closest('.scene');
+            if (scene) {
+              var panels = scene.querySelectorAll('.info-panel');
+              for (var i = 0; i < panels.length; i++) {
+                if (!self.el.contains(panels[i])) {
+                  panels[i].setAttribute('visible', false);
+                }
+              }
+            }
+            // Flash red
+            self.el.setAttribute('material', 'color', '#FF0000');
+            self.el.setAttribute('material', 'emissive', '#FF0000');
+            self.el.setAttribute('material', 'emissiveIntensity', '0.8');
+            setTimeout(function () {
+              self.el.setAttribute('material', 'color', originalColor);
+              self.el.setAttribute('material', 'emissive', originalColor);
+              self.el.setAttribute('material', 'emissiveIntensity', '0.3');
+            }, 400);
+            var panel = self.el.querySelector('.info-panel');
+            if (panel) {
+              panel.setAttribute('visible', !panel.getAttribute('visible'));
+            }
+          });
+        }
+      });
+
+      // ── Component: nav-btn ──
+      AFRAME.registerComponent('nav-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+
+      // ── Component: scene-btn (same as nav-btn) ──
+      AFRAME.registerComponent('scene-btn', {
+        init: function () {
+          var target = this.el.getAttribute('data-target');
+          this.el.addEventListener('click', function () {
+            navigateToScene(target);
+          });
+        }
+      });
+
+      // ── Component: restart-btn ──
+      AFRAME.registerComponent('restart-btn', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            if (typeof stopAutoTour === 'function') stopAutoTour();
+            navigateToScene('scene-intro');
+          });
+        }
+      });
+
+      // ── Navigate function ──
+      function navigateToScene(sceneId) {
+        for (var i = 0; i < ALL_SCENES.length; i++) {
+          var el = document.getElementById(ALL_SCENES[i]);
+          if (el) el.setAttribute('visible', false);
+        }
+        var panels = document.querySelectorAll('.info-panel');
+        for (var j = 0; j < panels.length; j++) {
+          panels[j].setAttribute('visible', false);
+        }
+        var target = document.getElementById(sceneId);
+        if (target) target.setAttribute('visible', true);
+        var cam = document.querySelector('[camera]');
+        if (cam) cam.setAttribute('rotation', '0 0 0');
+        console.log('Navigated to:', sceneId);
+      }
+
+      // ── Auto-Guided Tour ──
+      var tourActive = false, tourTimer = null, tourStep = 0;
+      var tourItinerary = [
+        ['scene-1', -30, 7, true], ['scene-1', 30, 6, true], ['scene-1', 120, 6, true],
+        ['scene-2', 0, 7, true], ['scene-2', 90, 6, true], ['scene-2', -60, 6, true],
+        ['scene-3', 0, 7, true], ['scene-3', 120, 6, true], ['scene-3', -120, 6, true],
+        ['scene-complete', 0, 8, false]
+      ];
+
+      function startAutoTour() {
+        if (tourActive) return;
+        tourActive = true; tourStep = 0;
+        navigateToScene('scene-1');
+        var btn = document.getElementById('auto-tour-btn');
+        if (btn) {
+          btn.setAttribute('material', 'color', '#757575');
+          var t = btn.querySelector('a-text');
+          if (t) t.setAttribute('value', '\u23F9 \u09A5\u09BE\u09AE\u09BE\u09A8');
+        }
+        runTourStep();
+      }
+
+      function runTourStep() {
+        if (!tourActive) return;
+        if (tourStep >= tourItinerary.length) { stopAutoTour(); return; }
+        var step = tourItinerary[tourStep];
+        var sceneId = step[0], rotY = step[1], delay = step[2] * 1000, clickH = step[3];
+        navigateToScene(sceneId);
+        setTimeout(function() {
+          if (!tourActive) return;
+          var cam = document.querySelector('[camera]');
+          if (cam) cam.setAttribute('rotation', '0 ' + rotY + ' 0');
+        }, 300);
+        if (clickH) {
+          setTimeout(function() {
+            if (!tourActive) return;
+            var sc = document.getElementById(sceneId);
+            if (sc) {
+              var hs = sc.querySelectorAll('[hotspot], [hazard]');
+              if (hs.length > 0) {
+                try { hs[tourStep % hs.length].dispatchEvent(new MouseEvent('click', {bubbles: true})); } catch(e) {}
+              }
+            }
+          }, 1500);
+        }
+        tourTimer = setTimeout(function() {
+          tourStep++;
+          runTourStep();
+          var btn = document.getElementById('auto-tour-btn');
+          if (btn) {
+            var t = btn.querySelector('a-text');
+            if (t) t.setAttribute('value', '\u23F9 \u09A5\u09BE\u09AE\u09BE\u09A8 (' + (tourStep+1) + '/' + tourItinerary.length + ')');
+          }
+        }, delay);
+      }
+
+      function stopAutoTour() {
+        tourActive = false;
+        if (tourTimer) { clearTimeout(tourTimer); tourTimer = null; }
+        var btn = document.getElementById('auto-tour-btn');
+        if (btn) {
+          btn.setAttribute('material', 'color', '#4CAF50');
+          var t = btn.querySelector('a-text');
+          if (t) t.setAttribute('value', '\uD83D\uDD04 \u0985\u099F\u09CB \u099F\u09CD\u09AF\u09C1\u09B0');
+        }
+      }
+
+      AFRAME.registerComponent('auto-tour', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            if (!tourActive) startAutoTour(); else stopAutoTour();
+          });
+        }
+      });
+
+      setTimeout(function() {
+        var btn = document.getElementById('auto-tour-btn');
+        if (btn) btn.setAttribute('auto-tour', '');
+      }, 500);
+
+      console.log('Fire Hazard Hunt VR loaded');
+    })();
+  </script>
+</body>
+</html>
