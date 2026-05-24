@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>অগ্নি ত্রিভুজ অন্বেষক — Fire Triangle AR</title>
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.3/aframe/build/aframe-ar.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans Bengali','Siyam Rupali','Arial Unicode MS',sans-serif;background:#000;touch-action:none;user-select:none;-webkit-user-select:none}
+.a-enter-vr,.a-enter-ar,.a-loader-title{display:none!important}
+#ar-scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:10;pointer-events:auto;touch-action:none}
+#modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;animation:fadeIn 0.3s ease}
+#modal.show{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+#modal-card{width:88%;max-width:400px;background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:24px;padding:28px 22px;color:#fff;text-align:center;position:relative;border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+#modal-close{position:absolute;top:10px;right:14px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:26px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+#modal-close:active{background:rgba(255,255,255,0.1);color:#fff}
+#modal-icon{font-size:48px;margin-bottom:6px}
+#modal-title{font-size:20px;font-weight:700;margin-bottom:4px}
+#modal-label{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:12px}
+#modal-desc{font-size:15px;line-height:1.7;color:rgba(255,255,255,0.85);padding:0 6px}
+#modal-action{font-size:15px;line-height:1.6;margin-top:12px;padding:12px 14px;border-radius:12px;font-weight:600}
+#modal-action.cooling{background:rgba(0,180,255,0.15);color:#4dc9f6;border:1px solid rgba(0,180,255,0.3)}
+#modal-action.firebreak{background:rgba(255,180,0,0.15);color:#ffb422;border:1px solid rgba(255,180,0,0.3)}
+#modal-action.smothering{background:rgba(120,80,255,0.15);color:#9b6dff;border:1px solid rgba(120,80,255,0.3)}
+#guide{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);z-index:11;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:14px;padding:10px 18px;color:#fff;font-size:12.5px;text-align:center;pointer-events:none;opacity:0;transition:opacity 0.5s;max-width:88%;border:1px solid rgba(255,255,255,0.07);line-height:1.6}
+#guide.show{opacity:1}
+#status-bar{position:fixed;top:10px;left:10px;z-index:12;display:flex;gap:6px;flex-wrap:wrap;pointer-events:none}
+.status-dot{display:flex;align-items:center;gap:5px;padding:4px 10px 4px 7px;border-radius:16px;font-size:10.5px;font-weight:600;color:rgba(255,255,255,0.4);background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.05);transition:all 0.3s}
+.status-dot .dot{width:9px;height:9px;border-radius:50%;transition:all 0.3s}
+.status-dot.active{color:#fff;border-color:rgba(255,255,255,0.18)}
+.status-dot.active .dot{box-shadow:0 0 10px currentColor}
+.dot.heat{background:#ff4444}
+.dot.fuel{background:#ff8800}
+.dot.oxygen{background:#4488ff}
+.status-dot.active .dot.heat{background:#ff2222;box-shadow:0 0 12px #ff4444}
+.status-dot.active .dot.fuel{background:#ff6600;box-shadow:0 0 12px #ff8800}
+.status-dot.active .dot.oxygen{background:#2266ff;box-shadow:0 0 12px #4488ff}
+#info-btn{position:fixed;top:10px;right:10px;z-index:12;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#info-btn:active{background:rgba(255,255,255,0.12)}
+#help-panel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;background:rgba(0,0,0,0.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;animation:fadeIn 0.25s ease}
+#help-panel.show{display:flex;flex-direction:column}
+#help-panel .content{max-width:420px;width:88%;color:#fff;text-align:center;padding:10px 0}
+#help-panel h2{font-size:18px;margin-bottom:8px}
+#help-panel p{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:16px}
+.help-markers{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.help-marker{width:110px;text-align:center;background:rgba(255,255,255,0.05);border-radius:12px;padding:8px;border:1px solid rgba(255,255,255,0.08)}
+.help-marker canvas{width:94px;height:94px;border-radius:6px;background:#fff;margin-bottom:6px}
+.help-marker .hl{font-size:11px;font-weight:600}
+.help-marker .hs{font-size:10px;color:rgba(255,255,255,0.5)}
+#gen-link{color:#66aaff;text-decoration:underline;font-size:12px;cursor:pointer}
+#hp-close{margin-top:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.12);color:#fff;font-size:14px;padding:10px 32px;border-radius:24px;cursor:pointer}
+#hp-close:active{background:rgba(255,255,255,0.18)}
+#loading{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;background:#0a0a1a;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:14px;text-align:center;transition:opacity 0.8s}
+#loading.hidden{opacity:0;pointer-events:none}
+#loading .spinner{width:38px;height:38px;border:3px solid rgba(255,255,255,0.08);border-top-color:#ff4444;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:14px}
+#loading .sub{color:rgba(255,255,255,0.35);font-size:12px;margin-top:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#celebration{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none}
+@media(max-width:380px){
+  .status-dot{font-size:9.5px;padding:3px 8px 3px 5px}
+  #guide{font-size:11px;padding:8px 14px;bottom:66px}
+  #modal-card{padding:20px 14px}
+  #modal-title{font-size:17px}
+}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div><div>অগ্নি ত্রিভুজ অন্বেষক</div><div class="sub">ক্যামেরা চালু হচ্ছে...</div></div>
+
+<a-scene id="ar-scene" embedded
+  arjs="sourceType:webcam;debugUIEnabled:false;detectionMode:mono_and_matrix;matrixCodeType:3x3;patternRatio:0.5;maxDetectionRate:60;"
+  renderer="antialias:true;alpha:true;">
+
+  <!-- MARKER 0 (Hiro) → Heat (তাপ) — red corner -->
+  <a-marker preset="hiro" id="marker-heat">
+    <a-entity position="0 0.07 0">
+      <a-plane color="#ff3333" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
+      <a-ring color="#ff4444" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
+        <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
+        <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
+      </a-ring>
+      <a-text value="তাপ" color="#ff5555" align="center" position="0 0.055 0.002" scale="0.06 0.06 1"></a-text>
+      <a-text value="MARKER 0" color="#ff5555" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
+    </a-entity>
+  </a-marker>
+
+  <!-- MARKER 1 (Kanji) → Fuel (জ্বালানি) — orange corner -->
+  <a-marker preset="kanji" id="marker-fuel">
+    <a-entity position="0 0.07 0">
+      <a-plane color="#ff8800" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
+      <a-ring color="#ff8800" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
+        <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
+        <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
+      </a-ring>
+      <a-text value="জ্বালানি" color="#ffaa44" align="center" position="0 0.055 0.002" scale="0.05 0.05 1"></a-text>
+      <a-text value="MARKER 1" color="#ffaa44" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
+    </a-entity>
+  </a-marker>
+
+  <!-- MARKER 2 (Barcode 0) → Oxygen (অক্সিজেন) — blue corner -->
+  <a-marker type="barcode" value="0" id="marker-oxygen">
+    <a-entity position="0 0.07 0">
+      <a-plane color="#3388ff" opacity="0.2" width="0.15" height="0.15" side="double"></a-plane>
+      <a-ring color="#4488ff" opacity="0.5" radius-inner="0.04" radius-outer="0.08" position="0 0 0.001">
+        <a-animation attribute="opacity" dur="1000" from="0.5" to="0.15" repeat="indefinite" direction="alternate"></a-animation>
+        <a-animation attribute="radius-outer" dur="1000" from="0.08" to="0.095" repeat="indefinite" direction="alternate"></a-animation>
+      </a-ring>
+      <a-text value="অক্সিজেন" color="#6699ff" align="center" position="0 0.055 0.002" scale="0.05 0.05 1"></a-text>
+      <a-text value="BARCODE 0" color="#6699ff" align="center" position="0 -0.055 0.002" scale="0.035 0.035 1" opacity="0.6"></a-text>
+    </a-entity>
+  </a-marker>
+
+  <a-entity camera></a-entity>
+  <a-entity light="type:ambient;color:white;intensity:0.6"></a-entity>
+</a-scene>
+
+<canvas id="overlay"></canvas>
+
+<div id="status-bar">
+  <div class="status-dot" id="dot-heat"><span class="dot heat"></span><span>তাপ</span></div>
+  <div class="status-dot" id="dot-fuel"><span class="dot fuel"></span><span>জ্বালানি</span></div>
+  <div class="status-dot" id="dot-oxygen"><span class="dot oxygen"></span><span>অক্সিজেন</span></div>
+</div>
+
+<div id="guide">🔥 ক্যামেরা তিনটি মার্কারের দিকে ঘুরান:<br>
+  <span style="color:#ff5555">■ Hiro (তাপ)</span>
+  <span style="color:#ffaa44">■ Kanji (জ্বালানি)</span>
+  <span style="color:#6699ff">■ Barcode 0 (অক্সিজেন)</span>
+</div>
+
+<button id="info-btn" aria-label="Help">ⓘ</button>
+
+<div id="help-panel">
+  <div class="content">
+    <h2>🔥 অগ্নি ত্রিভুজ AR</h2>
+    <p>তিনটি মুদ্রিত মার্কার ক্যামেরার সামনে ধরে অগ্নি ত্রিভুজ পূর্ণ করুন</p>
+    <div class="help-markers" id="help-markers"></div>
+    <p style="font-size:12px;">মার্কার হারিয়ে গেলে আবার দেখান → ত্রিভুজ আবার পূর্ণ হবে।<br>
+    <a id="gen-link" onclick="window.open('https://ar-js-org.github.io/AR.js/example-apps/marker-training/generator.html','_blank')">🌐 AR.js Marker Generator →</a>
+    <br><small>(Barcode 0 নির্বাচন করে জেনারেট করে প্রিন্ট করুন)</small></p>
+    <button id="hp-close">বুঝেছি, শুরু করি</button>
+  </div>
+</div>
+
+<div id="modal">
+  <div id="modal-card">
+    <button id="modal-close">✕</button>
+    <div id="modal-icon">🔥</div>
+    <div id="modal-title"></div>
+    <div id="modal-label"></div>
+    <div id="modal-desc"></div>
+    <div id="modal-action"></div>
+  </div>
+</div>
+
+<canvas id="celebration"></canvas>
+
+<script>
+(function(){
+  'use strict';
+  const state={triangle:{heat:0,fuel:0,oxygen:0}};
+  const markerFound={0:false,1:false,2:false};
+  let allFoundOnce=false;
+  const canvas=document.getElementById('overlay');
+  const ctx=canvas.getContext('2d');
+  const guide=document.getElementById('guide');
+  const loading=document.getElementById('loading');
+  const dots={heat:document.getElementById('dot-heat'),fuel:document.getElementById('dot-fuel'),oxygen:document.getElementById('dot-oxygen')};
+  const modal=document.getElementById('modal');
+  const modalTitle=document.getElementById('modal-title');
+  const modalIcon=document.getElementById('modal-icon');
+  const modalLabel=document.getElementById('modal-label');
+  const modalDesc=document.getElementById('modal-desc');
+  const modalAction=document.getElementById('modal-action');
+  const modalClose=document.getElementById('modal-close');
+  const infoBtn=document.getElementById('info-btn');
+  const helpPanel=document.getElementById('help-panel');
+  const helpMarkers=document.getElementById('help-markers');
+  const hpClose=document.getElementById('hp-close');
+  const celebCanvas=document.getElementById('celebration');
+  const celebCtx=celebCanvas.getContext('2d');
+  let celebParticles=[],celebActive=false,cornerRects={heat:null,fuel:null,oxygen:null};
+
+  function getTriangleGeom(W,H){
+    const cx=W/2,baseY=H-50,sideLen=Math.min(W*0.34,190);
+    const height=sideLen*Math.sqrt(3)/2;
+    return{
+      top:{x:cx,y:baseY-height*0.75},
+      bl:{x:cx-sideLen/2,y:baseY+height*0.25},
+      br:{x:cx+sideLen/2,y:baseY+height*0.25},
+      center:{x:cx,y:baseY-height*0.25},
+      sideLen,height,cx,baseY
+    };
+  }
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function drawWedge(c,corner,p1,p2,color,fill,W){
+    const g=getTriangleGeom(canvas.width,canvas.height);
+    const center=g.center;
+    const F=Math.min(fill,1);
+    if(F<0.01)return;
+    const ep1={x:lerp(corner.x,p1.x,0.5),y:lerp(corner.y,p1.y,0.5)};
+    const ep2={x:lerp(corner.x,p2.x,0.5),y:lerp(corner.y,p2.y,0.5)};
+    const tc1={x:lerp(ep1.x,center.x,F),y:lerp(ep1.y,center.y,F)};
+    const tc2={x:lerp(ep2.x,center.x,F),y:lerp(ep2.y,center.y,F)};
+    c.beginPath();
+    c.moveTo(corner.x,corner.y);
+    c.lineTo(tc1.x,tc1.y);
+    c.lineTo(tc2.x,tc2.y);
+    c.closePath();
+    const alpha=0.2+F*0.55;
+    const grad=c.createRadialGradient(corner.x,corner.y,2,corner.x,corner.y,55);
+    grad.addColorStop(0,color+'cc');
+    const ha=Math.round(alpha*180).toString(16).padStart(2,'0');
+    grad.addColorStop(0.4,color+ha);
+    grad.addColorStop(1,color+'22');
+    c.fillStyle=grad;c.fill();
+    if(F>0.05&&F<1){
+      c.font=Math.min(11,W*0.028)+'px "Noto Sans Bengali","Siyam Rupali",sans-serif';
+      c.textAlign='center';c.textBaseline='middle';
+      c.fillStyle='rgba(255,255,255,'+(0.3+F*0.4)+')';
+      c.fillText(Math.round(F*100)+'%',lerp(corner.x,center.x,0.55),lerp(corner.y,center.y,0.55));
+    }
+  }
+
+  function drawTriangle(W,H){
+    const g=getTriangleGeom(W,H);
+    const {top,bl,br,center,sideLen,height}=g;
+    const s=state.triangle;
+    const allComplete=s.heat>=0.99&&s.fuel>=0.99&&s.oxygen>=0.99;
+    ctx.clearRect(0,0,W,H);
+    if(allComplete){
+      const glow=Math.sin(Date.now()/500)*0.5+0.5;
+      const grad=ctx.createRadialGradient(center.x,center.y,0,center.x,center.y,sideLen*0.8);
+      grad.addColorStop(0,'rgba(255,200,50,'+(0.08+glow*0.06)+')');
+      grad.addColorStop(1,'rgba(255,200,50,0)');
+      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    }
+    ctx.beginPath();
+    ctx.moveTo(top.x,top.y);ctx.lineTo(bl.x,bl.y);ctx.lineTo(br.x,br.y);ctx.closePath();
+    ctx.strokeStyle=allComplete?'rgba(255,220,100,'+(0.6+Math.sin(Date.now()/400)*0.2)+')':'rgba(255,255,255,0.25)';
+    ctx.lineWidth=2.5;ctx.stroke();
+    drawWedge(ctx,top,bl,br,'#ff3333',s.heat,W);
+    drawWedge(ctx,bl,br,top,'#ff8800',s.fuel,W);
+    drawWedge(ctx,br,top,bl,'#3388ff',s.oxygen,W);
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(center.x,center.y);ctx.lineTo(top.x,top.y);
+    ctx.moveTo(center.x,center.y);ctx.lineTo(bl.x,bl.y);
+    ctx.moveTo(center.x,center.y);ctx.lineTo(br.x,br.y);ctx.stroke();
+    const labels=[
+      {text:'তাপ',x:top.x,y:top.y-22,color:'#ff5555'},
+      {text:'জ্বালানি',x:bl.x-10,y:bl.y+34,color:'#ffaa44'},
+      {text:'অক্সিজেন',x:br.x+10,y:br.y+34,color:'#5599ff'}
+    ];
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    labels.forEach(l=>{
+      const gl=allComplete?Math.sin(Date.now()/300+l.text.length)*0.3+0.7:0;
+      if(allComplete&&gl>0){ctx.shadowColor=l.color;ctx.shadowBlur=18*gl;}
+      ctx.font='bold '+Math.min(W*0.045,17)+'px "Noto Sans Bengali","Siyam Rupali",sans-serif';
+      ctx.fillStyle=l.color;ctx.fillText(l.text,l.x,l.y);ctx.shadowBlur=0;
+    });
+    if(allComplete){
+      ctx.font='bold '+Math.min(W*0.055,21)+'px "Noto Sans Bengali","Siyam Rupali",sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='top';
+      const pulse=Math.sin(Date.now()/400)*0.15+0.85;
+      ctx.fillStyle='rgba(255,220,80,'+pulse+')';
+      ctx.fillText('✓ অগ্নি ত্রিভুজ পূর্ণ',center.x,center.y-height*0.52);
+      ctx.font=Math.min(W*0.033,13)+'px "Noto Sans Bengali","Siyam Rupali",sans-serif';
+      ctx.fillStyle='rgba(255,255,255,0.4)';
+      ctx.fillText('কোণে ট্যাপ করুন → জানুন',center.x,center.y-height*0.52+24);
+    }
+    const hr=Math.max(42,sideLen*0.2);
+    cornerRects={
+      heat:{x:top.x-hr/2,y:top.y-hr/2-8,w:hr,h:hr+18},
+      fuel:{x:bl.x-hr/2,y:bl.y-hr/2,w:hr,h:hr+12},
+      oxygen:{x:br.x-hr/2,y:br.y-hr/2,w:hr,h:hr+12}
+    };
+  }
+
+  function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    celebCanvas.width=window.innerWidth;
+    celebCanvas.height=window.innerHeight;
+  }
+
+  function update(){
+    const W=canvas.width,H=canvas.height;
+    if(!W||!H)return;
+    const speed=0.03;
+    const keys=['heat','fuel','oxygen'];
+    keys.forEach((k,i)=>{
+      const t=markerFound[i]?1:0;
+      state.triangle[k]+=(t-state.triangle[k])*speed;
+      if(Math.abs(state.triangle[k]-t)<0.001)state.triangle[k]=t;
+    });
+    const all=state.triangle.heat>=0.99&&state.triangle.fuel>=0.99&&state.triangle.oxygen>=0.99;
+    if(all&&!allFoundOnce){
+      allFoundOnce=true;
+      guide.innerHTML='🎉 অগ্নি ত্রিভুজ সম্পূর্ণ! কোণে ট্যাপ করে জানুন কীভাবে আগুন নিয়ন্ত্রণ করবেন';
+      guide.classList.add('show');
+      setTimeout(()=>guide.classList.remove('show'),5000);
+    }else if(!all){allFoundOnce=false;}
+    keys.forEach((k,i)=>{
+      if(state.triangle[k]>0.3)dots[k].classList.add('active');
+      else dots[k].classList.remove('active');
+    });
+    drawTriangle(W,H);
+    if(all){
+      if(!celebActive){celebActive=true;spawnCeleb(W,H);}
+      drawCeleb(W,H);
+    }else{celebActive=false;celebCtx.clearRect(0,0,W,H);}
+    requestAnimationFrame(update);
+  }
+
+  function spawnCeleb(W,H){
+    celebParticles=[];
+    const cs=['#ff4444','#ff8800','#4488ff','#ffdd44','#44ff88','#ff44ff'];
+    for(let i=0;i<36;i++){
+      celebParticles.push({
+        x:Math.random()*W,y:H+10+Math.random()*30,
+        vx:(Math.random()-0.5)*4,vy:-(2.5+Math.random()*3.5),
+        r:2.5+Math.random()*4.5,color:cs[i%6],
+        life:1,decay:0.005+Math.random()*0.008,rot:Math.random()*Math.PI*2,
+        rotSpeed:(Math.random()-0.5)*0.12
+      });
+    }
+  }
+
+  function drawCeleb(W,H){
+    celebCtx.clearRect(0,0,W,H);
+    for(let i=celebParticles.length-1;i>=0;i--){
+      const p=celebParticles[i];
+      p.x+=p.vx;p.y+=p.vy;p.vy+=0.06;p.life-=p.decay;p.rot+=p.rotSpeed;
+      if(p.life<=0||p.y>H+20){
+        p.x=Math.random()*W;p.y=H+8;p.vy=-(2+Math.random()*3);p.vx=(Math.random()-0.5)*3;p.life=1;
+      }
+      celebCtx.save();
+      celebCtx.translate(p.x,p.y);celebCtx.rotate(p.rot);
+      celebCtx.globalAlpha=Math.max(0,p.life*0.6);
+      celebCtx.fillStyle=p.color;celebCtx.shadowColor=p.color;celebCtx.shadowBlur=8;
+      const s=p.r;celebCtx.beginPath();
+      for(let j=0;j<5;j++){
+        const a=(j/5)*Math.PI*2-Math.PI/2,a2=a+Math.PI/5;
+        if(j===0)celebCtx.moveTo(Math.cos(a)*s,Math.sin(a)*s);
+        else celebCtx.lineTo(Math.cos(a)*s,Math.sin(a)*s);
+        celebCtx.lineTo(Math.cos(a2)*s*0.4,Math.sin(a2)*s*0.4);
+      }
+      celebCtx.closePath();celebCtx.fill();celebCtx.restore();
+    }
+    if(celebActive)requestAnimationFrame(()=>drawCeleb(W,H));
+  }
+
+  function setupMarkerEvents(){
+    const markers={0:document.getElementById('marker-heat'),1:document.getElementById('marker-fuel'),2:document.getElementById('marker-oxygen')};
+    const names=['তাপ (Hiro)','জ্বালানি (Kanji)','অক্সিজেন (Barcode 0)'];
+    Object.entries(markers).forEach(([val,el])=>{
+      if(!el)return;
+      el.addEventListener('markerFound',()=>{
+        markerFound[val]=true;
+        guide.textContent='🔍 "'+names[val]+'" চিহ্নিত!';
+        guide.classList.add('show');
+        setTimeout(()=>{
+          const found=Object.values(markerFound).filter(Boolean).length;
+          guide.textContent=found>=3?'🎉 সব চিহ্নিত!':'📷 বাকি '+(3-found)+'টি মার্কার খুঁজুন';
+        },2000);
+      });
+      el.addEventListener('markerLost',()=>{
+        markerFound[val]=false;
+        guide.textContent='👀 "'+names[val]+'" হারিয়ে গেছে';
+        guide.classList.add('show');
+        setTimeout(()=>{
+          const found=Object.values(markerFound).filter(Boolean).length;
+          guide.textContent=found===0?'📷 মার্কারের দিকে ক্যামেরা ঘুরান':'📷 বাকি '+(3-found)+'টি মার্কার খুঁজুন';
+        },2000);
+      });
+    });
+  }
+
+  function handleTap(type){
+    const d={
+      heat:{icon:'🔥',title:'তাপ — শীতলীকরণ',label:'প্রথম কোণ · Heat',desc:'তাপ দহনের মূল চালিকাশক্তি। তাপ অপসারণ করলেই আগুন নিভে যায়।',action:'🔥 শীতলীকরণ: জল ছিটানো, ফোম বা শুষ্ক রাসায়নিক নির্বাপক ব্যবহার করা হয়। তাপমাত্রা দহনাংকের নিচে নামিয়ে আনাই মূল লক্ষ্য।',cls:'cooling'},
+      fuel:{icon:'🪵',title:'জ্বালানি — অগ্নি প্রতিবন্ধক',label:'দ্বিতীয় কোণ · Fuel',desc:'জ্বালানি ছাড়া আগুন জ্বলতে পারে না। জ্বালানি অপসারণ আগুন ছড়িয়ে পড়া রোধ করে।',action:'🛑 অগ্নি প্রতিবন্ধক: দাহ্য পদার্থ সরিয়ে ফেলা, আগুনের পথে ফায়ারব্রেক তৈরি করা, বা জ্বালানি উৎস কেটে দেওয়া। বন ও কলকারখানায় এটি অত্যন্ত কার্যকর কৌশল।',cls:'firebreak'},
+      oxygen:{icon:'💨',title:'অক্সিজেন — শ্বাসরোধ',label:'তৃতীয় কোণ · Oxygen',desc:'অক্সিজেন দহন প্রক্রিয়াকে টিকিয়ে রাখে। অক্সিজেন সরিয়ে দিলে আগুন নিভে যায়।',action:'🧯 শ্বাসরোধ: ফোম, কার্বন ডাই-অক্সাইড (CO₂) নির্বাপক, বা কম্বল/কম্বল দিয়ে আগুন ঢেকে বাতাসের অক্সিজেন প্রবাহ বন্ধ করা। ছোট আগুনের জন্য অত্যন্ত কার্যকরী।',cls:'smothering'}
+    };
+    const x=d[type];if(!x)return;
+    modalIcon.textContent=x.icon;
+    modalTitle.textContent=x.title;
+    modalLabel.textContent=x.label;
+    modalDesc.textContent=x.desc;
+    modalAction.textContent=x.action;
+    modalAction.className=x.cls;
+    modal.classList.add('show');
+  }
+
+  function onCanvas(e){
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    let x,y;
+    if(e.touches){const t=e.touches[0]||e.changedTouches[0];x=t.clientX-rect.left;y=t.clientY-rect.top;}
+    else{x=e.clientX-rect.left;y=e.clientY-rect.top;}
+    for(const[t,cr]of Object.entries(cornerRects)){
+      if(!cr)continue;
+      if(x>=cr.x&&x<=cr.x+cr.w&&y>=cr.y&&y<=cr.y+cr.h){
+        if(state.triangle[t]>0.5){handleTap(t);return;}
+      }
+    }
+  }
+
+  canvas.addEventListener('click',onCanvas);
+  canvas.addEventListener('touchstart',onCanvas,{passive:true});
+  modalClose.addEventListener('click',()=>modal.classList.remove('show'));
+  modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('show');});
+
+  infoBtn.addEventListener('click',()=>{
+    helpMarkers.innerHTML='';
+    const ms=[
+      {name:'Hiro — তাপ',sub:'মার্কার ০',cls:'color:#ff5555'},
+      {name:'Kanji — জ্বালানি',sub:'মার্কার ১',cls:'color:#ffaa44'},
+      {name:'Barcode 0 — অক্সিজেন',sub:'মার্কার ২',cls:'color:#6699ff'}
+    ];
+    ms.forEach(m=>{
+      const d=document.createElement('div');d.className='help-marker';
+      const cv=document.createElement('canvas');cv.width=94;cv.height=94;
+      d.appendChild(cv);
+      const l=document.createElement('div');l.className='hl';l.style.cssText=m.cls;l.textContent=m.name;
+      d.appendChild(l);
+      const s=document.createElement('div');s.className='hs';s.textContent=m.sub;
+      d.appendChild(s);
+      helpMarkers.appendChild(d);
+    });
+    helpPanel.classList.add('show');
+  });
+  hpClose.addEventListener('click',()=>helpPanel.classList.remove('show'));
+  helpPanel.addEventListener('click',(e)=>{if(e.target===helpPanel)helpPanel.classList.remove('show');});
+
+  const arScene=document.querySelector('a-scene');
+  if(arScene)arScene.addEventListener('loaded',()=>setTimeout(()=>loading.classList.add('hidden'),500));
+  setTimeout(()=>loading.classList.add('hidden'),8000);
+
+  resize();
+  window.addEventListener('resize',resize);
+  window.addEventListener('orientationchange',()=>setTimeout(resize,300));
+  setupMarkerEvents();
+  setTimeout(()=>guide.classList.add('show'),2000);
+  update();
+})();
+</script>
+</body>
+</html>

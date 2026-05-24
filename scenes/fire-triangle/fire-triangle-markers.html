@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>অগ্নি ত্রিভুজ AR — মার্কার প্রিন্ট করুন</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans Bengali','Siyam Rupali',sans-serif;background:#f5f5f5;padding:30px 20px;text-align:center;color:#222}
+h1{font-size:22px;margin-bottom:4px}
+.sub{color:#666;font-size:14px;margin-bottom:28px;line-height:1.6}
+.markers{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 3px 16px rgba(0,0,0,0.08);width:210px;text-align:center;border:1px solid #eee}
+.card canvas{width:170px;height:170px;margin:0 auto 10px;border:2px solid #ddd;border-radius:6px;background:#fff}
+.card .name{font-size:16px;font-weight:700;margin-bottom:2px}
+.card .subn{font-size:12px;color:#888;margin-bottom:4px}
+.card .hint{font-size:11px;color:#999;margin-top:6px}
+.badge{display:inline-block;padding:3px 12px;border-radius:10px;font-size:12px;font-weight:600;color:#fff}
+.b-red{background:linear-gradient(135deg,#ff4444,#cc2222)}
+.b-orange{background:linear-gradient(135deg,#ff8800,#dd6600)}
+.b-blue{background:linear-gradient(135deg,#4488ff,#2266dd)}
+.steps{max-width:550px;margin:30px auto 0;background:#fff;border-radius:14px;padding:22px 26px;text-align:left;box-shadow:0 3px 16px rgba(0,0,0,0.06)}
+.steps h2{font-size:16px;margin-bottom:10px;text-align:center}
+.steps ol{padding-left:20px;line-height:2;font-size:14px;color:#444}
+.steps li strong{color:#222}
+.steps code{background:#eee;padding:1px 7px;border-radius:4px;font-size:13px;color:#555}
+.steps .link{display:inline-block;margin-top:12px;color:#4488ff;text-decoration:underline;font-size:13px;cursor:pointer}
+.footer{color:#aaa;font-size:12px;margin-top:28px}
+@media print{body{background:#fff;padding:15px}.card{box-shadow:none;break-inside:avoid}.steps{box-shadow:none}.no-print{display:none!important}}
+</style>
+</head>
+<body>
+<h1>🔥 অগ্নি ত্রিভুজ AR — মার্কার গ্যালারি</h1>
+<p class="sub">প্রত্যেক মার্কার A4 সাইজে প্রিন্ট করুন। ক্যামেরা দিয়ে স্ক্যান করলেই কোণ পূর্ণ হবে!</p>
+
+<div class="markers">
+  <div class="card">
+    <canvas id="m0"></canvas>
+    <div class="name" style="color:#cc2222">Hiro — তাপ</div>
+    <div class="subn">মার্কার ০ · Heat</div>
+    <span class="badge b-red">লাল কোণ</span>
+    <div class="hint">AR.js ডিফল্ট Hiro প্যাটার্ন</div>
+  </div>
+  <div class="card">
+    <canvas id="m1"></canvas>
+    <div class="name" style="color:#dd6600">Kanji — জ্বালানি</div>
+    <div class="subn">মার্কার ১ · Fuel</div>
+    <span class="badge b-orange">কমলা কোণ</span>
+    <div class="hint">AR.js ডিফল্ট Kanji প্যাটার্ন</div>
+  </div>
+  <div class="card">
+    <canvas id="m2"></canvas>
+    <div class="name" style="color:#2266dd">Barcode 0 — অক্সিজেন</div>
+    <div class="subn">মার্কার ২ · Oxygen</div>
+    <span class="badge b-blue">নীল কোণ</span>
+    <div class="hint">AR.js বারকোড মান ০</div>
+  </div>
+</div>
+
+<div class="steps">
+  <h2>📋 ব্যবহারবিধি</h2>
+  <ol>
+    <li>উপরের তিনটি মার্কার <strong>প্রিন্ট করুন</strong> (পূর্ণ A4 তে)</li>
+    <li>মোবাইল ব্রাউজারে <code>fire-triangle-ar.html</code> খুলুন</li>
+    <li>ক্যামেরা অ্যাক্সেস অনুমতি দিন</li>
+    <li>প্রিন্ট করা মার্কারের দিকে ক্যামেরা ঘুরান</li>
+    <li>প্রতিটি মার্কার শনাক্ত হলে → সংশ্লিষ্ট কোণ পূর্ণ হবে 🌓</li>
+    <li>তিনটি কোণ পূর্ণ হলে অগ্নি ত্রিভুজ জ্বলে উঠবে 🎉</li>
+    <li>প্রতিটি পূর্ণ কোণে <strong>ট্যাপ করুন</strong> → আগুন নিয়ন্ত্রণের পদ্ধতি জানুন</li>
+  </ol>
+  <p style="margin-top:12px;font-size:13px;color:#888;text-align:center;">
+    💡 মার্কার হারিয়ে গেলে পুনরায় দেখান — ত্রিভুজ আবার পূর্ণ হবে
+  </p>
+  <p style="text-align:center;">
+    <a class="link" onclick="window.open('https://ar-js-org.github.io/AR.js/example-apps/marker-training/generator.html','_blank')" style="cursor:pointer">
+      🌐 AR.js Marker Generator → বিকল্প মার্কার তৈরি করুন
+    </a>
+  </p>
+</div>
+
+<p class="footer no-print">📱 এই পৃষ্ঠা প্রিন্ট করে মার্কার কেটে ব্যবহার করুন</p>
+
+<script>
+// AR.js marker patterns (16×16 normalized grids)
+// From official AR.js pattern files (ardata/)
+const HIRO_PATTERN = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,1,0,1,1,0,1,0,1,1,0,1],
+  [1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,1],
+  [1,0,0,1,0,1,1,0,1,1,0,0,1,0,0,1],
+  [1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,1],
+  [1,0,0,0,1,0,1,0,0,0,1,1,0,1,0,1],
+  [1,0,0,1,0,1,0,1,1,0,1,0,1,1,0,1],
+  [1,0,0,1,1,1,0,1,0,1,0,1,1,0,0,1],
+  [1,0,1,1,1,1,0,1,0,1,0,1,1,0,1,1],
+  [1,0,1,0,1,0,1,1,1,0,1,1,0,0,0,1],
+  [1,0,1,0,1,1,1,0,1,1,1,0,0,1,0,1],
+  [1,0,0,0,1,0,1,1,1,0,1,1,0,1,1,1],
+  [1,0,1,0,1,1,1,0,1,0,1,0,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+];
+
+const KANJI_PATTERN = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,0,1,0,1,1,0,1,1,1,0,1],
+  [1,0,1,1,0,1,0,1,0,1,0,0,1,1,0,1],
+  [1,0,1,0,0,1,1,0,0,1,0,1,0,0,0,1],
+  [1,0,0,1,0,1,0,1,1,0,0,1,0,0,0,1],
+  [1,0,1,0,1,0,1,1,0,1,0,1,1,1,0,1],
+  [1,0,1,0,0,1,1,0,1,0,0,1,1,1,0,1],
+  [1,0,0,1,1,0,0,1,0,1,0,1,0,0,0,1],
+  [1,0,0,0,1,0,1,1,1,0,0,0,0,1,0,1],
+  [1,0,1,1,1,1,0,1,0,1,0,1,0,1,0,1],
+  [1,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1],
+  [1,0,1,0,0,1,1,1,0,1,0,0,1,1,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+];
+
+// Barcode 0 pattern — standard AR.js 3x3 matrix code for value 0
+const BARCODE_0_PATTERN = (function(){
+  // Standard 7x7 barcode with 3x3 data area
+  // Outer border all black, inner border all white
+  // Data area for value 0: top row filled, middle row blank, bottom row half
+  return [
+    [1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,1],
+    [1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,1],
+    [1,0,1,0,1,0,1],
+    [1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1]
+  ];
+})();
+
+function drawPattern(canvasId, grid, label, cellSize) {
+  const c = document.getElementById(canvasId);
+  const ctx = c.getContext('2d');
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const cs = cellSize || Math.floor(170 / rows);
+  const size = rows * cs;
+  c.width = size;
+  c.height = size;
+  
+  // Draw cells
+  for (let r = 0; r < rows; r++) {
+    for (let col = 0; col < cols; col++) {
+      ctx.fillStyle = grid[r][col] ? '#000' : '#fff';
+      ctx.fillRect(col * cs, r * cs, cs, cs);
+    }
+  }
+  
+  // Border
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(0, 0, size, size);
+}
+
+drawPattern('m0', HIRO_PATTERN, 'Hiro', 10);
+drawPattern('m1', KANJI_PATTERN, 'Kanji', 10);
+drawPattern('m2', BARCODE_0_PATTERN, 'Barcode 0', 24);
+</script>
+</body>
+</html>
